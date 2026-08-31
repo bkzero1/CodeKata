@@ -5,20 +5,37 @@ using namespace std;
 
 int solution(string t, string p)
 {
+    // 같은 길이의 숫자 문자열은 사전식 비교로 크기 비교가 가능하다는 점을 이용한 풀이
     int answer = 0;
-    long long numP = stoll(p);  // p를 숫자로 변환 / 최대 18자리이므로 int 범위를 넘어 long long 사용
 
     for (int i = 0; i + p.size() <= t.size(); ++i)  // i부터 p 길이만큼 잘랐을 때 t의 범위를 벗어나지 않는 동안 반복
     {
-        long long currentRefNum = stoll(t.substr(i, p.size())); // t에서 i부터 p 길이만큼 잘라낸 부분 문자열을 숫자로 변환
-        
-        if (numP >= currentRefNum)
+        string subT = t.substr(i, p.size()); // t에서 i부터 p 길이만큼 잘라낸 문자열
+
+        if (p >= subT)
         {
             ++answer;
         }
     }
 
     return answer;
+
+
+    // stoi 계열을 이용한 숫자 변환 풀이
+    //int answer = 0;
+    //long long numP = stoll(p);  // p를 숫자로 변환 / 최대 18자리이므로 int 범위를 넘어 long long 사용
+
+    //for (int i = 0; i + p.size() <= t.size(); ++i)  // i부터 p 길이만큼 잘랐을 때 t의 범위를 벗어나지 않는 동안 반복
+    //{
+    //    long long currentRefNum = stoll(t.substr(i, p.size())); // t에서 i부터 p 길이만큼 잘라낸 부분 문자열을 숫자로 변환
+    //    
+    //    if (numP >= currentRefNum)
+    //    {
+    //        ++answer;
+    //    }
+    //}
+
+    //return answer;
 }
 
 void Test(const string& t, const string& p, int expected)
