@@ -6,6 +6,18 @@ using namespace std;
 int solution(string t, string p)
 {
     int answer = 0;
+    long long numP = stoll(p);  // p를 숫자로 변환 / 최대 18자리이므로 int 범위를 넘어 long long 사용
+
+    for (int i = 0; i + p.size() <= t.size(); ++i)  // i부터 p 길이만큼 잘랐을 때 t의 범위를 벗어나지 않는 동안 반복
+    {
+        long long currentRefNum = stoll(t.substr(i, p.size())); // t에서 i부터 p 길이만큼 잘라낸 부분 문자열을 숫자로 변환
+        
+        if (numP >= currentRefNum)
+        {
+            ++answer;
+        }
+    }
+
     return answer;
 }
 
@@ -30,7 +42,7 @@ void Test(const string& t, const string& p, int expected)
 
 int main()
 {
-    Test("3141592", "271", 2);       // 문제 예제
+    Test("3141592", "271", 2);      // 문제 예제
     Test("500220839878", "7", 8);   // 문제 예제
     Test("10203", "15", 3);         // 문제 예제
 
