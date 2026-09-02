@@ -19,35 +19,28 @@ string solution(string s, int n) {
         {
             continue;
         }
-        // 대소문자 판별
-        int shiftedPosition = ch + n;
-        if (std::isupper(ch))    // 대문자면
-        {
-            // 실제 이동 전 가상 위치를 먼저 계산
-            if (shiftedPosition > 'Z')
-            {
-                // (이동을 마친 위치) - (Z 다음 위치)
-                int wrapOffset = shiftedPosition - ('Z' + 1);
 
-                ch = 'A' + wrapOffset;  // Z를 넘어간 거리만큼 A에서 이동
+        // a로부터 위치를 구하기 위해 우선 소문자로 변경
+        char lowerCh = std::tolower(ch);
+
+        // a부터의 거리
+        int offsetFromA = lowerCh - 'a';
+
+        // offset + n 이 z(25)를 넘어가는가?
+        if (offsetFromA + n > 25)
+        {
+            if (std::islower(ch))
+            {
+                ch = 'a' + (offsetFromA + n) - 26;
             }
             else
             {
-                ch += n;
+                ch = 'A' + (offsetFromA + n) - 26;
             }
         }
         else
         {
-            if (shiftedPosition > 'z')
-            {
-                int wrapOffset = shiftedPosition - ('z' + 1);
-
-                ch = 'a' + wrapOffset;  // z를 넘어간 거리만큼 A에서 이동
-            }
-            else
-            {
-                ch += n;
-            }
+            ch += n;
         }
     }
 
