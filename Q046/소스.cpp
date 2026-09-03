@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                            ⭐ 해결 완료 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
@@ -13,7 +13,8 @@
 using namespace std;
 std::pair<int, int> getNumberInfo(const std::string& s, int index)
 {
-    std::map<std::string, std::pair<int, int>> numberInfoByPrefix = {
+    //static const로 한번만 메모리에 생성
+    static const std::map<std::string, std::pair<int, int>> numberInfoByPrefix = {
         {"ze", {0, 4 - 1}}, // 0
         {"on", {1, 3 - 1}}, // 1
         {"tw", {2, 3 - 1}}, // 2
