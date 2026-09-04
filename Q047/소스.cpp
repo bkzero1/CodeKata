@@ -21,7 +21,7 @@ using namespace std;
 //}
 
 vector<string> solution(vector<string> strings, int n) {
-	vector<string> answer = strings;
+	//vector<string> answer = strings;
 	
 	// n번째 문자를 비교 기준으로 사용하기 위해 n을 값으로 캡처
 	auto compare = [n](const string& s1, const string& s2)
@@ -36,8 +36,8 @@ vector<string> solution(vector<string> strings, int n) {
 			}
 		};
 
-	std::sort(answer.begin(), answer.end(), compare);
-	return answer;
+	std::sort(strings.begin(), strings.end(), compare);
+	return strings;
 }
 
 void PrintVector(const vector<string>& values)
