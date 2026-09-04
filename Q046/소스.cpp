@@ -11,7 +11,11 @@
 #include <utility>
 
 using namespace std;
-std::pair<int, int> getNumberInfo(const std::string& s, int index)
+
+// 모든 숫자 영단어는 앞의 두 글자만으로 구별할 수 있음
+// pair는 구조체를 만들어서도 해결가능. 구조적 바인딩(c++17 이상)을 사용하지 않고도 first, second에 의미 부여 가능
+//                                     ex) auto [digit, skipCount] = getDigitInfoFromPrefix(s, i);
+std::pair<int, int> getDigitInfoFromPrefix(const std::string& s, int index) 
 {
     //static const로 한번만 메모리에 생성
     static const std::map<std::string, std::pair<int, int>> numberInfoByPrefix = {
@@ -36,18 +40,20 @@ int solution(string s) {
     int answer = 0;
 
     //std::string text = "11zero";
-    //std::cout << getNumberInfo(text , 2).second << " \n";
+    //std::cout << getDigitInfoFromPrefix(text , 2).second << " \n";
 
     for (int i = 0; i < s.size(); ++i)
     {
+        // 숫자 한 자리를 추가할 공간을 만듦
         answer *= 10;
+
         if (std::isdigit(s[i]))
         {
             answer += s[i] - '0';
         }
         else
         {
-            std::pair<int, int> numberInfo = getNumberInfo(s, i);
+            std::pair<int, int> numberInfo = getDigitInfoFromPrefix(s, i);
             answer += numberInfo.first;
             i += numberInfo.second;
         }
