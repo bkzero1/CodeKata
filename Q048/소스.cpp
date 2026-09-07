@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                            ⭐ 해결 완료 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
@@ -9,7 +9,6 @@
 #include <algorithm>
 
 using namespace std;
-void PrintVector(const vector<int>& values);
 
 vector<int> solution(vector<int> array, vector<vector<int>> commands) {
     vector<int> answer;
@@ -21,17 +20,13 @@ vector<int> solution(vector<int> array, vector<vector<int>> commands) {
         std::vector<int> subArray;
         const vector<int>& command = commands[i];   // 가독성을 위해 현재 커맨드를 읽기 전용 참조로 지정
 
-        int startPosition = command[0];
-        int endPosition = command[1];
-
-        //cout << startPosition << endPosition << endl;
-
         // 현재 명령이 지정한 구간을 임시 배열에 복사
-        for (int j = startPosition; j <= endPosition; ++j)
+        // 처음에는 현재 이터레이터와 구간 끝을 < 로 비교했지만, 구간 끝에 도달할 때까지라는 의미가 명확한 !=로 변경
+        for (auto it = array.begin() + command[0] - 1; it != array.begin() + command[1]; ++it)
         {
             //std::cout << array[j - 1];
 
-            subArray.push_back(array[j - 1]);
+            subArray.push_back(*it);
         }
 
         // 선택한 구간을 오름차순으로 정렬
