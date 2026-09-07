@@ -12,20 +12,16 @@ using namespace std;
 
 vector<int> solution(vector<int> array, vector<vector<int>> commands) {
     vector<int> answer;
-    //cout << "t " << *(commands[0].begin()+2) << endl;
 
-    // 커맨드 수만큼 반복
-    for (int i = 0; i < commands.size(); ++i)
+    // 각 커맨드를 읽기 전용 참조로 순회
+    for(const vector<int>& command : commands)
     {
         std::vector<int> subArray;
-        const vector<int>& command = commands[i];   // 가독성을 위해 현재 커맨드를 읽기 전용 참조로 지정
 
         // 현재 명령이 지정한 구간을 임시 배열에 복사
         // 처음에는 현재 이터레이터와 구간 끝을 < 로 비교했지만, 구간 끝에 도달할 때까지라는 의미가 명확한 !=로 변경
         for (auto it = array.begin() + command[0] - 1; it != array.begin() + command[1]; ++it)
         {
-            //std::cout << array[j - 1];
-
             subArray.push_back(*it);
         }
 
