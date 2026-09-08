@@ -6,31 +6,23 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <set>
 
 using namespace std;
 
 vector<int> solution(vector<int> numbers) {
-    vector<int> answer;
+    std::set<int> uniqueSums;
 
-    // 작은 수부터 합을 만들어 생성 과정과 중복을 파악하기 쉽게 하려고 입력을 정렬
-    // 다만 합이 항상 오름차순으로 생성되지는 않으므로 결과는 마지막에 별도로 정렬
-    //std::sort(numbers.begin(), numbers.end());
     for (int i = 0; i + 1 < numbers.size(); ++i)
     {
         for (int j = i + 1; j < numbers.size(); ++j)
         {
-            int sum = numbers[i] + numbers[j];
-
-            // 이전에 추가하지 않은 합만 결과에 저장
-            if (find(answer.begin(), answer.end(), sum) == answer.end())
-            {
-                answer.push_back(sum);
-            }
+            uniqueSums.insert(numbers[i] + numbers[j]);
         }
     }
 
-    // 조합의 순회 순서와 관계없이 결과의 오름차순을 보장
-    std::sort(answer.begin(), answer.end());
+    // 중복이 제거되고 오름차순으로 정렬된 set의 원소를 결과 벡터로 복사
+    vector<int> answer(uniqueSums.begin(), uniqueSums.end());
     return answer;
 }
 
