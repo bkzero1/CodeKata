@@ -6,32 +6,23 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <set>
 
 using namespace std;
 
 vector<int> solution(vector<int> numbers) {
-    vector<int> answer;
+    std::set<int> uniqueSums;
 
     for (int i = 0; i + 1 < numbers.size(); ++i)
     {
         for (int j = i + 1; j < numbers.size(); ++j)
         {
-            int sum = numbers[i] + numbers[j];
-    
-            // 중복허용하게 저장하고 나중에 정리
-            answer.push_back(sum);
+            uniqueSums.insert(numbers[i] + numbers[j]);
         }
     }
 
-    // unique는 연속된 중복만 정리하므로, 같은 값이 서로 붙도록 합들을 오름차순으로 정렬
-    std::sort(answer.begin(), answer.end());
-
-    // 중복을 정리한 뒤 새로운 논리적 끝을 받음
-    auto newEnd = std::unique(answer.begin(), answer.end());
-
-    // 논리적 끝 이후의 원소를 벡터에서 실제로 제거
-    answer.erase(newEnd, answer.end());
-
+    // 중복이 제거되고 오름차순으로 정렬된 set의 원소를 결과 벡터로 복사
+    vector<int> answer(uniqueSums.begin(), uniqueSums.end());
     return answer;
 }
 
