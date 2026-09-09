@@ -17,15 +17,16 @@ vector<int> solution(string s) {
     {
         char ch = s[i];
 
-        auto findedch = charPosition.find(ch);
+        auto foundPosition = charPosition.find(ch);
 
-        if (findedch != charPosition.end()) // 찾음
+        if (foundPosition != charPosition.end()) // 이전에 나온 문자라면
         {
-            // answer에 거리값을 넣기 위해 저장
-            int distance = i - charPosition[ch];
-            
-            // 마지막 위치로 갱신
-            charPosition[ch] = i;
+            // find()로 찾은 원소를 재사용하여 같은 키를 다시 탐색하지 않음
+            // 현재 위치와 마지막으로 발견한 위치 사이의 거리 계산
+            int distance = i - foundPosition->second;
+
+            // 다음 거리 계산을 위해 마지막 위치를 현재 인덱스로 갱신
+            foundPosition->second = i;
             answer.push_back(distance);
 
             continue;
