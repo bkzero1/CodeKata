@@ -14,19 +14,15 @@ string solution(vector<int> food) {
     // 두 선수에게 동일하게 배분한 음식으로 한쪽 배치를 구성
     for (int i = 1; i < food.size(); ++i)
     {
-        // 처음에는 홀수로 남는 음식 하나를 직접 제외했지만,
-        // 정수 나눗셈에서 나머지가 버려지므로 아래의 food[i] /= 2만으로 동일하게 처리됨
-        //if (food[i] % 2 == 1)
-        //{
-        //    --food[i];
-        //}
-
         food[i] /= 2;
 
         // 현재 음식 번호를 한쪽에 배치할 개수만큼 이어 붙임
         char foodCharacter = i + '0';
-        string foodSequence(food[i], foodCharacter);
-        answer.insert(answer.end(), foodSequence.begin(), foodSequence.end());
+
+        //string foodSequence(food[i], foodCharacter);
+        //answer.insert(answer.end(), foodSequence.begin(), foodSequence.end());
+        // 위 두 줄을 append로 대체: 반복할 개수, 반복할 문자
+        answer.append(food[i], foodCharacter);
     }
     
     // 반대편 배치를 위해 한쪽 문자열을 역순으로 복사
