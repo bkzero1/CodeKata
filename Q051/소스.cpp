@@ -14,14 +14,13 @@ string solution(vector<int> food) {
     // 두 선수에게 동일하게 배분한 음식으로 한쪽 배치를 구성
     for (int i = 1; i < food.size(); ++i)
     {
+        // 정수 나눗셈으로 한 선수가 먹을 개수를 계산
+        // 홀수로 남는 음식 하나는 나머지와 함께 자연스럽게 제외됨
         food[i] /= 2;
 
         // 현재 음식 번호를 한쪽에 배치할 개수만큼 이어 붙임
         char foodCharacter = i + '0';
 
-        //string foodSequence(food[i], foodCharacter);
-        //answer.insert(answer.end(), foodSequence.begin(), foodSequence.end());
-        // 위 두 줄을 append로 대체: 반복할 개수, 반복할 문자
         answer.append(food[i], foodCharacter);
     }
     
@@ -30,7 +29,7 @@ string solution(vector<int> food) {
 
     // 두 선수 사이에 물을 놓고 반대편 배치를 연결
     answer.push_back('0');
-    answer.insert(answer.end(), opponentSide.begin(), opponentSide.end());
+    answer.append(opponentSide);
     
     return answer;
 }
