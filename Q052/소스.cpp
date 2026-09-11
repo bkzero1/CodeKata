@@ -10,14 +10,15 @@ using namespace std;
 
 int solution(int a, int b, int n) {
     int answer = 0;
-    
-    while (n >= a)
-    {   
-        int rest = 0;
-        answer += n / a * b;
 
-        rest = n % a;
-        n = n / a * b + rest;
+    while (n >= a)
+    {
+        int rest = n % a;
+        int receivedCola = n / a * b;
+
+        answer += receivedCola;
+
+        n = receivedCola + rest;
     }
     return answer;
 }
