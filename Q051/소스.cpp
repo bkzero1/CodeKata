@@ -28,10 +28,10 @@ string solution(vector<int> food) {
     string opponentSide(answer.rbegin(), answer.rend());
 
     // 두 선수 사이에 물을 놓고 반대편 배치를 연결
-    answer.push_back('0');
-    answer.append(opponentSide);
+    //answer.push_back('0');
+    //answer.append(opponentSide);
     
-    return answer;
+    return answer + '0' + opponentSide;
 }
 
 
