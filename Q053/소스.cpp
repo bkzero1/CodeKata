@@ -29,16 +29,12 @@ vector<int> solution(int k, vector<int> score) {
 			// 점수 추가
 			hallOfFame.insert(num);	
 
-			// 추가된 점수는 첫번째 원소보다 if조건에 의해서 무조건 크게 되어 두번째 이상에 있으므로 첫번째 원소를 제거
+			// 기존 최저 점수를 제거하여 상위 k개의 점수만 유지
 			hallOfFame.erase(hallOfFame.begin());
 			
-			// 제거 후에 원소가 k개인 상태에서 점수 기록
-			answer.push_back(*hallOfFame.begin());
 		}
-		else
-		{
-			answer.push_back(*hallOfFame.begin());
-		}
+		// 오늘 점수를 반영한 명예의 전당에서 현재 최저 점수를 기록
+		answer.push_back(*hallOfFame.begin());
 	}
 
 	return answer;
