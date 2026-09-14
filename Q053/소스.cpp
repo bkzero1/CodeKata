@@ -18,13 +18,8 @@ vector<int> solution(int k, vector<int> score) {
 		if (hallOfFame.size() < k)
 		{
 			hallOfFame.insert(num);
-
-			answer.push_back(*hallOfFame.begin());
-			continue;
 		}
-
-		// 명예의 전당이 k개로 가득 찬 경우에만 여기까지 도달
-		if (num > *hallOfFame.begin())	// 명예의 전당에 들어갈 점수라면
+		else if (num > *hallOfFame.begin())	// 현재 커트라인보다 높은 점수라면
 		{
 			// 점수 추가
 			hallOfFame.insert(num);	
