@@ -5,17 +5,22 @@
 
 #include <string>
 #include <vector>
+#include <numeric>
+
 using namespace std;
 
 string solution(int a, int b) {
-    const std::vector<int> daysBeforeMonth = { 0 ,31, 60, 91, 121, 152,
-        182, 213, 244, 274, 305,
-        335 };
-    const std::vector<string> weekdays = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
+    static const std::vector<int> daysInMonth = {
+    31, 29, 31, 30, 31, 30,
+    31, 31, 30, 31, 30, 31
+    };
+    static const std::vector<string> weekdays = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
 
     const int weekdayOffset = 4; // 1월 1일이 금요일 인덱스 5가 되도록 보정
-
-    return weekdays[(daysBeforeMonth[a - 1] + b + weekdayOffset) % 7];
+    
+    int daysBeforeMonth = std::accumulate(daysInMonth.begin(), daysInMonth.begin() + (a - 1), 0);
+    
+    return weekdays[(daysBeforeMonth + b + weekdayOffset) % 7];
 }
 
 
