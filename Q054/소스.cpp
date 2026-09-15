@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                            ⭐ 해결 완료 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
@@ -11,14 +11,18 @@ using namespace std;
 
 string solution(int a, int b) {
     static const std::vector<int> daysInMonth = {
-    31, 29, 31, 30, 31, 30,
-    31, 31, 30, 31, 30, 31
+        31, 29, 31, 30, 31, 30,
+        31, 31, 30, 31, 30, 31
     };
     static const std::vector<string> weekdays = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
 
     const int weekdayOffset = 4; // 1월 1일이 금요일 인덱스 5가 되도록 보정
     
-    int daysBeforeMonth = std::accumulate(daysInMonth.begin(), daysInMonth.begin() + (a - 1), 0);
+    const int daysBeforeMonth = std::accumulate(
+        daysInMonth.begin(), 
+        daysInMonth.begin() + (a - 1), 
+        0
+    );
     
     return weekdays[(daysBeforeMonth + b + weekdayOffset) % 7];
 }
