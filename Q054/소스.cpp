@@ -16,15 +16,18 @@ string solution(int a, int b) {
     };
     static const std::vector<string> weekdays = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
 
-    const int weekdayOffset = 4; // 1월 1일이 금요일 인덱스 5가 되도록 보정
-    
+    const int januaryFirstIndex = 5; // 2016년 1월 1일은 금요일
+
     const int daysBeforeMonth = std::accumulate(
-        daysInMonth.begin(), 
-        daysInMonth.begin() + (a - 1), 
+        daysInMonth.begin(),
+        daysInMonth.begin() + (a - 1),
         0
     );
-    
-    return weekdays[(daysBeforeMonth + b + weekdayOffset) % 7];
+
+    const int elapsedDays =
+        daysBeforeMonth + (b - 1);
+
+    return weekdays[(elapsedDays + januaryFirstIndex) % 7];
 }
 
 
