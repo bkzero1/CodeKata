@@ -5,31 +5,43 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 string solution(vector<string> cards1, vector<string> cards2, vector<string> goal) {
-    auto cards1strItr = cards1.begin();
-    auto cards2strItr = cards2.begin();
+    auto itr1 = cards1.begin();
+    auto itr1End = cards1.end();
 
-    for (const string& str : goal)
+    auto itr2 = cards2.begin();
+    auto itr2End = cards2.end();
+
+    bool isFinish = std::all_of(goal.begin(), goal.end(), 
+        [&itr1, &itr2, itr1End, itr2End](const string& str) {
+            if ((itr1 != itr1End) && *itr1 == str)
+            {
+                ++itr1;
+                return true;
+            }
+            else if ((itr2 != itr2End) && *itr2 == str)
+            {
+                ++itr2;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    );
+
+    if (isFinish)
     {
-        // &&는 앞 조건이 거짓이면 뒤 조건을 평가하지 않음
-        // 카드가 남아 있을 때만 이터레이터의 값을 읽어 범위 밖 접근을 방지
-        if (cards1strItr != cards1.end() && str == *cards1strItr)
-        {
-            ++cards1strItr;
-        }
-        else if (cards2strItr != cards2.end() && str == *cards2strItr)
-        {
-            ++cards2strItr;
-        }
-        else
-        {
-            return "No";
-        }
+        return "Yes";
     }
-
-    return "Yes";
+    else
+    {
+        return "No";
+    }
 }
 
 //==========================================================================
