@@ -18,12 +18,10 @@ string solution(vector<string> cards1, vector<string> cards2, vector<string> goa
         if (cards1strItr != cards1.end() && str == *cards1strItr)
         {
             ++cards1strItr;
-            continue;
         }
         else if (cards2strItr != cards2.end() && str == *cards2strItr)
         {
             ++cards2strItr;
-            continue;
         }
         else
         {
