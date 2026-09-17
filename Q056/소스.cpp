@@ -19,50 +19,18 @@ int solution(int k, int m, vector<int> score) {
     }
 
     int applesInBox = 0;
-    // 높은 점수부터 사과를 하나씩 사용해 상자를 구성
-    // 상자가 완성되는 순간의 currentScore가 해당 상자의 최저 점수
+    // 높은 점수부터 해당 점수의 사과와 이전 단계에서 남은 사과를 함께 처리
+    // 이번 단계에서 완성되는 상자는 currentScore를 최저 점수로 사용
     for (int currentScore = k; currentScore >= 1; --currentScore)
     {
-        if (applesInBox != 0)
-        {
-            int applesNeeded = m - applesInBox;
-            if (scoreCounts[currentScore] > applesNeeded)
-            {
-                scoreCounts[currentScore] -= applesNeeded;
-                applesInBox += applesNeeded;
-
-                answer += currentScore * m;
-                applesInBox = 0;
-            }
-            else
-            {
-                applesInBox += scoreCounts[currentScore];
-                scoreCounts[currentScore] = 0;
-            }
-        }
-
-        // 개수가 많을 때는 m으로 나눈 나머지 제외하고 곱해서 더함, 나머지는 m에 조금 채움
-        if (scoreCounts[currentScore] >= m && applesInBox == 0)
-        {
-            int applesInFullBoxes = scoreCounts[currentScore] - (scoreCounts[currentScore] % m);
-            answer += currentScore * applesInFullBoxes;
-            scoreCounts[currentScore] %= m;
-
-            applesInBox += scoreCounts[currentScore];
-            scoreCounts[currentScore] = 0;
-
-            continue;
-        }
-        else
-        {
-            applesInBox += scoreCounts[currentScore];
-            scoreCounts[currentScore] = 0;
-        }
-        if (applesInBox == m)
-        {
-            answer += currentScore * m;
-            applesInBox = 0;
-        }
+        // 이전에 남은 사과와 현재 점수의 사과를 합쳐 묶음으로 처리
+        int availableApples = applesInBox + scoreCounts[currentScore];
+        
+        // 한 세트 가격 * 몇 묶음인지
+        answer += (currentScore * m) * (availableApples / m) ;
+        
+        // 남은 사과 이월
+        applesInBox = availableApples % m;
     }
 
     return answer;
