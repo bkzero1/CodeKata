@@ -12,26 +12,56 @@ int solution(int k, int m, vector<int> score) {
     int answer = 0;
     // 점수를 인덱스로 사용하고, 각 원소에 해당 점수의 사과 개수를 저장
     std::vector<int> scoreCounts(k + 1, 0);
-    
+
     for (int appleScore : score)
     {
         ++scoreCounts[appleScore];
     }
-    
+
     int applesInBox = 0;
     // 높은 점수부터 사과를 하나씩 사용해 상자를 구성
     // 상자가 완성되는 순간의 currentScore가 해당 상자의 최저 점수
     for (int currentScore = k; currentScore >= 1; --currentScore)
     {
-        while (scoreCounts[currentScore] > 0)
+        if (applesInBox != 0)
         {
-            --scoreCounts[currentScore];
-            ++applesInBox;
-            if (applesInBox == m)
+            int applesNeeded = m - applesInBox;
+            if (scoreCounts[currentScore] > applesNeeded)
             {
+                scoreCounts[currentScore] -= applesNeeded;
+                applesInBox += applesNeeded;
+
                 answer += currentScore * m;
                 applesInBox = 0;
             }
+            else
+            {
+                applesInBox += scoreCounts[currentScore];
+                scoreCounts[currentScore] = 0;
+            }
+        }
+
+        // 개수가 많을 때는 m으로 나눈 나머지 제외하고 곱해서 더함, 나머지는 m에 조금 채움
+        if (scoreCounts[currentScore] >= m && applesInBox == 0)
+        {
+            int applesInFullBoxes = scoreCounts[currentScore] - (scoreCounts[currentScore] % m);
+            answer += currentScore * applesInFullBoxes;
+            scoreCounts[currentScore] %= m;
+
+            applesInBox += scoreCounts[currentScore];
+            scoreCounts[currentScore] = 0;
+
+            continue;
+        }
+        else
+        {
+            applesInBox += scoreCounts[currentScore];
+            scoreCounts[currentScore] = 0;
+        }
+        if (applesInBox == m)
+        {
+            answer += currentScore * m;
+            applesInBox = 0;
         }
     }
 
@@ -57,40 +87,43 @@ void PrintVector(const vector<int>& values)
 
 // [Codex 작성] 예상 결과와 실제 결과를 비교하는 테스트 함수
 void Test(const string& testName, int k, int m,
-          const vector<int>& score, int expected)
+    const vector<int>& score, int expected)
 {
     const int actual = solution(k, m, score);
     const bool success = actual == expected;
 
     cout << "\x1b[38;2;"
-         << (success ? "120;230;102" : "230;102;102")
-         << "m"
-         << (success ? " SUCCESS" : "  FAIL  ")
-         << "\x1b[0m"
-         << " | " << testName
-         << " | input: k=" << k
-         << ", m=" << m
-         << ", score=";
+        << (success ? "120;230;102" : "230;102;102")
+        << "m"
+        << (success ? " SUCCESS" : "  FAIL  ")
+        << "\x1b[0m"
+        << " | " << testName
+        << " | input: k=" << k
+        << ", m=" << m
+        << ", score=";
     PrintVector(score);
     cout << " | expected: " << expected
-         << " | actual: " << actual << '\n';
+        << " | actual: " << actual << '\n';
 }
 
 int main()
 {
     // 공식 입출력 예
     Test("official example 1", 3, 4,
-         { 1, 2, 3, 1, 2, 3, 1 }, 8);
+        { 1, 2, 3, 1, 2, 3, 1 }, 8);
     Test("official example 2", 4, 3,
-         { 4, 1, 2, 2, 4, 4, 4, 4, 1, 2, 4, 2 }, 33);
+        { 4, 1, 2, 2, 4, 4, 4, 4, 1, 2, 4, 2 }, 33);
 
     // Codex가 추가한 경계 테스트
     Test("not enough apples for one box", 3, 10,
-         { 1, 2, 3, 1, 2, 3, 1 }, 0);
+        { 1, 2, 3, 1, 2, 3, 1 }, 0);
     Test("discard apples left after full boxes", 5, 3,
-         { 5, 5, 5, 5 }, 15);
+        { 5, 5, 5, 5 }, 15);
     Test("choose profitable groups and discard one", 4, 2,
-         { 1, 4, 4, 2, 3 }, 12);
+        { 1, 4, 4, 2, 3 }, 12);
+
+    Test("complete a partially filled box with the next score", 4, 3,
+        { 4, 4, 3, 3, 2, 2, 2 }, 15);
 
     return 0;
 }
