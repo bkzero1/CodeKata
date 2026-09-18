@@ -11,23 +11,23 @@ using namespace std;
 
 vector<int> solution(vector<int> answers) {
 	std::vector<int> answer;
-	std::vector<std::vector<int>> answerPatterns = {
+	const std::vector<std::vector<int>> answerPatterns = {
 		{1, 2, 3, 4, 5},
 		{2, 1, 2, 3, 2, 4, 2, 5},
 		{3, 3, 1, 1, 2, 2, 4, 4, 5, 5}
 	};
 	
-	std::vector<int> correctCounts(3, 0);
+	std::vector<int> correctCounts(answerPatterns.size(), 0);
 
-	for (int i = 0; i < answerPatterns.size(); ++i)
+	for (int questionIndex = 0; questionIndex < answers.size(); ++questionIndex)
 	{
-		const std::vector<int>& studentPattern = answerPatterns[i];
-		
-		for (int j = 0; j < answers.size(); ++j)
+		for (int studentIndex = 0; studentIndex < answerPatterns.size(); ++studentIndex)
 		{
-			if (studentPattern[j % studentPattern.size()] == answers[j])
+			const std::vector<int>& studentPattern = answerPatterns[studentIndex];
+
+			if (studentPattern[questionIndex % studentPattern.size()] == answers[questionIndex])
 			{
-				++correctCounts[i];
+				++correctCounts[studentIndex];
 			}
 		}
 	}
