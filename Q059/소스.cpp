@@ -1,44 +1,29 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                            ⭐ 해결 완?료 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
 #include <vector>
 
 using namespace std;
-void PrintVector(const vector<int>& values)
-;
+
 int solution(int n, int m, vector<int> section) {
     int answer = 0;
-    std::vector<bool> canvas(n + 1, true);
 
-    for (int index : section)
+    int lastPosition = 0;
+
+    for (int position : section)
     {
-        canvas[index] = false;
-    }
-    auto it = canvas.begin();
-    while (true)
-    {
-        it = std::find(it, canvas.end(), false);
-
-        if (it == canvas.end())
+        if (lastPosition >= position)
         {
-            break;
+            continue;
         }
 
-        if (std::distance(it, canvas.end()) < m)
-        {
-            std::fill(it, canvas.end(), true);
-        }
-        else
-        {
-            std::fill(it, it + m, true);
-        }
-
+        lastPosition = position + m - 1;
         ++answer;
     }
-
+    
     return answer;
 }
 
