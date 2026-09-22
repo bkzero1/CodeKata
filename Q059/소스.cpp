@@ -27,13 +27,13 @@ int solution(int n, int m, vector<int> section) {
             break;
         }
 
-        for (int i = 0; i < m; ++i)
+        if (std::distance(it, canvas.end()) < m)
         {
-            if (it == canvas.end())
-                break;
-
-            *it = true;
-            ++it;
+            std::fill(it, canvas.end(), true);
+        }
+        else
+        {
+            std::fill(it, it + m, true);
         }
 
         ++answer;
