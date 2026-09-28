@@ -14,14 +14,16 @@ vector<int> solution(vector<int> lottos, vector<int> win_nums) {
     int zeroCount = 0;
     int correctCount = 0;
 
-    for (int i = 0; i < lottos.size(); ++i)
+    for (int num : lottos)
     {
-        if (lottos[i] == 0)
+        if (num == 0)
         {
             ++zeroCount;
+            
+            continue;
         }
 
-        if (std::find(lottos.begin(), lottos.end(), win_nums[i]) != lottos.end())
+        if (std::find(win_nums.begin(), win_nums.end(), num) != win_nums.end())
         {
             ++correctCount;
         }
