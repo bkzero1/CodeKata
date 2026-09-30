@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                       해결 완료  ⭐  ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
@@ -11,25 +11,30 @@ using namespace std;
 
 string solution(string X, string Y) {
     string answer = "";
-    std::vector<int> digitCounts(10, 0);
-    // 공통 숫자 벡터에 누적
-    // 스트링 하나를 기준을 잡고 해당 스트링의 문자 하나가 X Y에서 몇번 등장하는지 확인 후 적은 값을 등록
-    for (int i = 0; i <= 9; ++i)
+    std::vector<int> xDigitCounts(10, 0);
+    std::vector<int> yDigitCounts(10, 0);
+    
+    // 각 문자열을 한번씩 순회하여 숫자를 카운트
+    for(char ch : X)
     {
-        const auto countX = std::count(X.begin(), X.end(), i + '0');
-        const auto countY = std::count(Y.begin(), Y.end(), i + '0');
-        digitCounts[i] = static_cast<int>(std::min(countX, countY));
+        ++xDigitCounts[ch - '0'];
+    }
+    for(char ch : Y)
+    {
+        ++yDigitCounts[ch - '0'];
     }
     
     // 벡터 숫자 큰값부터 꺼내서 스트링에 이어붙이기
     for (int i = 9; i >= 0; --i)
     {
-        if (digitCounts[i] == 0)
+        int currentCount = std::min(xDigitCounts[i], yDigitCounts[i]);
+
+        if (currentCount == 0)
         {
             continue;
         }
-        
-        answer.append(digitCounts[i], i + '0');
+
+        answer.append(currentCount, i + '0');
     }
 
     if (answer.empty())
