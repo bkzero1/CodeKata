@@ -14,15 +14,11 @@ string solution(string X, string Y) {
     std::vector<int> digitCounts(10, 0);
     // 공통 숫자 벡터에 누적
     // 스트링 하나를 기준을 잡고 해당 스트링의 문자 하나가 X Y에서 몇번 등장하는지 확인 후 적은 값을 등록
-    for (char ch : X)
+    for (int i = 0; i <= 9; ++i)
     {
-        const int countX = std::count(X.begin(), X.end(), ch);
-        const int countY = std::count(Y.begin(), Y.end(), ch);
-        digitCounts[ch - '0'] = std::min(countX, countY);
-    }
-    for (int num : digitCounts)
-    {
-        cout << num << " ";
+        const int countX = std::count(X.begin(), X.end(), i + '0');
+        const int countY = std::count(Y.begin(), Y.end(), i + '0');
+        digitCounts[i] = std::min(countX, countY);
     }
     
     // 벡터 숫자 큰값부터 꺼내서 스트링에 이어붙이기
@@ -36,12 +32,12 @@ string solution(string X, string Y) {
         answer.append(digitCounts[i], i + '0');
     }
 
-    if (digitCounts[0] == 0 && answer == "")
+    if (answer.empty())
     {
         return "-1";
     }
 
-    if (stoi(answer) == 0)
+    if (!answer.empty() && answer.front() == '0')
     {
         return "0";
     }
@@ -63,6 +59,12 @@ void Test(const string& name, const string& X, const string& Y, const string& ex
 
 int main()
 {
+    Test(
+        "large common number",
+        "99999999999",
+        "99999999999",
+        "99999999999"
+    );
     Test("official example 1", "100", "2345", "-1");
     Test("official example 2", "100", "203045", "0");
     Test("official example 3", "100", "123450", "10");
