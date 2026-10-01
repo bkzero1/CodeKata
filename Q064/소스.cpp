@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                            ⭐ 해결 완료 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
@@ -9,53 +9,49 @@
 
 using namespace std;
 
-// 학생수 n, 잃어버린 학생번호 lost, 여벌있는 학생번호 reserve
 int solution(int n, vector<int> lost, vector<int> reserve) {
-    int answer = n; // n부터 감소하는 방법으로
-    // 빈칸 학생이 왼쪽부터 검사 빌려줄수 있는지, 왼쪽 안되면 오른쪽
+    int answer = n;
+    constexpr int usedReserveMarker = -1;
 
-    // 1로 채워진 벡터를 만들고 lost는 - resverve는 +
-    // 근데 벡터 안만들고도 가능할거 같음
-    // 근데 안벡터 버전은 빌려줬다고 쳤을 때 어떻게 그 숫자를 지우지 숫자를 0으로?
-    // 근데 안벡터 버전은 여벌학생이 잊어버리기도 했으면 어떡하지
+    // 도난 학생을 번호순으로 처리해 체육복 대여 순서를 일정하게 유지
+    std::sort(lost.begin(), lost.end());
 
-    // 우선 잃어버린 학생들 순회
+    // 도난과 여벌 명단에 모두 있는 학생은 자신의 여벌을 사용한 것으로 처리
+    for (int& lostStudent : lost)
+    {
+        const auto reserveItr = std::find(reserve.begin(), reserve.end(), lostStudent);
+
+        if (reserveItr != reserve.end() && lostStudent == *reserveItr)
+        {
+            *reserveItr = usedReserveMarker;
+            lostStudent = usedReserveMarker;
+            continue;
+        }
+    }
+
+    // 처리되지 않은 도난 학생에게 왼쪽 학생부터 여벌 체육복을 빌림
     for (int lostStudent : lost)
     {
-        // 순회하면서 resverve를 왼쪽검사 -> 오른쪽검사
-        // 1번 학생이 잃어버렸을 경우 왼쪽은 스킵
-        const auto reserveleftItr = std::find(reserve.begin(), reserve.end(), lostStudent - 1);
-        const auto reserverightItr = std::find(reserve.begin(), reserve.end(), lostStudent + 1);
-
-        // 왼쪽 검사
-        //if (lost.front() != 1)
+        if (lostStudent == usedReserveMarker)
         {
-            if (reserveleftItr != reserve.end() && reserverightItr != reserve.end())
-            {
-                // 양쪽 검사했는데 없으면 --
-                /*if (lostStudent != *reserveleftItr - 1 && lostStudent != *reserveleftItr + 1)
-                {
-                    if (lostStudent != *reserverightItr - 1 && lostStudent != *reserverightItr + 1)
-                    {*/
-                        --answer;
-                 /*   }
-                    else
-                    {
-                        *reserverightItr = 0;
-                    }
-                }*/
-            }
-            else
-            {
-                //*reserveleftItr = 0;
-            }
+            continue;
         }
 
-        // 오른쪽 검사
-         
-        // 마지막 학생이 잃어버렸을 경우 오른쪽 스킵
-        //if (lost.front() != 1 && lost.back() != n)
+        const auto reserveLeftItr = std::find(reserve.begin(), reserve.end(), lostStudent - 1);
+        const auto reserveRightItr = std::find(reserve.begin(), reserve.end(), lostStudent + 1);
 
+        if (reserveLeftItr != reserve.end())
+        {
+            *reserveLeftItr = usedReserveMarker;
+        }
+        else if (reserveRightItr != reserve.end())
+        {
+            *reserveRightItr = usedReserveMarker;
+        }
+        else
+        {
+            --answer;
+        }
     }
     
     return answer;
@@ -94,6 +90,7 @@ int main()
     Test("official example 1", 5, { 2, 4 }, { 1, 3, 5 }, 5);
     Test("official example 2", 5, { 2, 4 }, { 3 }, 4);
     Test("official example 3", 3, { 3 }, { 1 }, 2);
+    Test("lost input order", 5, { 4, 2 }, { 3, 5 }, 5);
     Test("adjacent boundary", 2, { 1 }, { 2 }, 2);
     Test("student in both lists", 5, { 2 }, { 2 }, 5);
     Test("overlap changes lending", 5, { 1, 2 }, { 2, 3 }, 4);
