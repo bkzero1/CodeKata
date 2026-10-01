@@ -28,6 +28,7 @@ int solution(int n, vector<int> lost, vector<int> reserve) {
     }
 
     // 체육복이 없으면 왼쪽부터 확인하고, 없으면 오른쪽 확인
+    // 빌리면 양쪽 학생의 체육복 수를 각각 갱신
     for (int studentNumber = 1; studentNumber <= n; ++studentNumber)
     {
         if (studentState[studentNumber] == 0)
@@ -36,10 +37,12 @@ int solution(int n, vector<int> lost, vector<int> reserve) {
             if (studentNumber != 1 && studentState[studentNumber - 1] > 1)
             {
                 --studentState[studentNumber - 1];
+                ++studentState[studentNumber];
             }
             else if (studentNumber != n && studentState[studentNumber + 1] > 1)
             {
                 --studentState[studentNumber + 1];
+                ++studentState[studentNumber];
             }
             else
             {
@@ -50,6 +53,7 @@ int solution(int n, vector<int> lost, vector<int> reserve) {
 
     return answer;
 }
+
 void PrintVector(const vector<int>& values)
 {
     cout << '[';
