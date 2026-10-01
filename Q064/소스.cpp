@@ -21,7 +21,7 @@ int solution(int n, vector<int> lost, vector<int> reserve) {
     {
         const auto reserveItr = std::find(reserve.begin(), reserve.end(), lostStudent);
 
-        if (reserveItr != reserve.end() && lostStudent == *reserveItr)
+        if (reserveItr != reserve.end())
         {
             *reserveItr = usedReserveMarker;
             lostStudent = usedReserveMarker;
