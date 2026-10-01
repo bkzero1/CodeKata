@@ -11,49 +11,43 @@ using namespace std;
 
 int solution(int n, vector<int> lost, vector<int> reserve) {
     int answer = n;
-    constexpr int usedReserveMarker = -1;
+    
+    // 학생 번호와 인덱스를 맞추기 위해 0번은 사용하지 않음
+    std::vector<int> studentState(n + 1, 1);
 
-    // 도난 학생을 번호순으로 처리해 체육복 대여 순서를 일정하게 유지
-    std::sort(lost.begin(), lost.end());
-
-    // 도난과 여벌 명단에 모두 있는 학생은 자신의 여벌을 사용한 것으로 처리
-    for (int& lostStudent : lost)
+    // 여벌은 +1
+    for (int reserveStudent : reserve)
     {
-        const auto reserveItr = std::find(reserve.begin(), reserve.end(), lostStudent);
-
-        if (reserveItr != reserve.end())
-        {
-            *reserveItr = usedReserveMarker;
-            lostStudent = usedReserveMarker;
-            continue;
-        }
+        ++studentState[reserveStudent];
     }
 
-    // 처리되지 않은 도난 학생에게 왼쪽 학생부터 여벌 체육복을 빌림
+    // 도난은 -1
     for (int lostStudent : lost)
     {
-        if (lostStudent == usedReserveMarker)
-        {
-            continue;
-        }
+        --studentState[lostStudent];
+    }
 
-        const auto reserveLeftItr = std::find(reserve.begin(), reserve.end(), lostStudent - 1);
-        const auto reserveRightItr = std::find(reserve.begin(), reserve.end(), lostStudent + 1);
-
-        if (reserveLeftItr != reserve.end())
+    // 체육복이 없으면 왼쪽부터 확인하고, 없으면 오른쪽 확인
+    for (int studentNumber = 1; studentNumber <= n; ++studentNumber)
+    {
+        if (studentState[studentNumber] == 0)
         {
-            *reserveLeftItr = usedReserveMarker;
-        }
-        else if (reserveRightItr != reserve.end())
-        {
-            *reserveRightItr = usedReserveMarker;
-        }
-        else
-        {
-            --answer;
+            // 처음과 끝은 && 단축 평가로 없는 방향을 검사하지 않음
+            if (studentNumber != 1 && studentState[studentNumber - 1] > 1)
+            {
+                --studentState[studentNumber - 1];
+            }
+            else if (studentNumber != n && studentState[studentNumber + 1] > 1)
+            {
+                --studentState[studentNumber + 1];
+            }
+            else
+            {
+                --answer;
+            }
         }
     }
-    
+
     return answer;
 }
 void PrintVector(const vector<int>& values)
