@@ -32,16 +32,14 @@ int solution(string s) {
         
         while (true)
         {
-            if (i < s.size())
-            {
-                // 다음 문자부터 시작
-                ++i;
-            }
-            else
+            ++i;
+            if (i >= s.size())
             {
                 ++answer;
                 break;
             }
+
+            currentPart += s[i];
 
             // x 다음 첫문자 읽어서 같으면 x카운팅 증가, 아니면 다른 카운팅 증가
             if (s[i] != counts.xCharacter)
@@ -58,8 +56,6 @@ int solution(string s) {
                 ++answer;
                 break;
             }
-
-            currentPart += s[i];
         }
     }
 
