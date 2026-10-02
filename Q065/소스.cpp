@@ -19,44 +19,44 @@ struct CharacterCounts
 int solution(string s) {
     int answer = 0;
 
-    // 종료조건 
-    // 1. x와 other의 숫자가 같아졌을 때 answer++
-    // 2. 같아지기 전이라도 문자열의 끝에 도달했을 때 answer++
+    CharacterCounts counts;
+    std::string currentPart{};  // 현재 묶음 확인용
+
+    // 문자열을 한 번 순회하며 현재 묶음의 상태를 다음 반복으로 이어서 사용
     for (int i = 0; i < s.size(); ++i)
     {
-        CharacterCounts counts;
-        counts.xCharacter = s[i];
-        counts.xCount = 1;
-
-        std::string currentPart(1, counts.xCharacter);  // 현재 묶음 확인용
-        
-        while (true)
+        // 진행 중인 묶음이 없으면 현재 문자를 새로운 x로 지정
+        if (counts.xCount == 0)
         {
-            ++i;
-            if (i >= s.size())
-            {
-                ++answer;
-                break;
-            }
-
-            currentPart += s[i];
-
-            // x 다음 첫문자 읽어서 같으면 x카운팅 증가, 아니면 다른 카운팅 증가
-            if (s[i] != counts.xCharacter)
-            {
-                ++counts.otherCount;
-            }
-            else
-            {
-                ++counts.xCount;
-            }
-
-            if (counts.xCount == counts.otherCount)
-            {
-                ++answer;
-                break;
-            }
+            counts.xCharacter = s[i];
+            currentPart.clear();
         }
+
+        currentPart += s[i];
+
+        // 현재 문자가 x와 같은지에 따라 해당 개수를 증가
+        if (s[i] != counts.xCharacter)
+        {
+            ++counts.otherCount;
+        }
+        else
+        {
+            ++counts.xCount;
+        }
+
+        // 두 개수가 같아지면 현재 묶음을 끝내고 다음 묶음을 위한 상태로 초기화
+        if (counts.xCount == counts.otherCount)
+        {
+            ++answer;
+            counts.xCount = 0;
+            counts.otherCount = 0;
+        }
+    }
+
+    // 두 개수가 달라진 채 문자열이 끝났다면 남은 부분도 하나의 묶음으로 처리
+    if (counts.xCount != 0)
+    {
+        ++answer;
     }
 
     return answer;
