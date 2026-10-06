@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                         ⭐ AI 도움 받아서 해결 완료, 다시 풀어볼 것 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
@@ -14,22 +14,44 @@ vector<int> solution(vector<string> keymap, vector<string> targets) {
     // 문자열 하나, 인덱스는 answer에 넣을 위치
     for(int i = 0; i < targets.size(); ++i)
     {
-
         // 숫자를 카운트할 변수, 0이면 없었으므로 넣지않고 answer 기본값 -1을 사용
         int totalPressCount = 0;
-        bool isTargetCompleted = false;
+        bool isTargetCompleted = true;
 
         const std::string& target = targets[i];
         for (char ch : target)
         {
             int keymapCount = 0;
-
             for (const std::string& str : keymap)
             {
-                keymapCount = find(str.begin(), str.end(), ch) - str.begin();
+                auto it = find(str.begin(), str.end(), ch);
+                if (it != str.end())
+                {
+                    const int foundPressCount = it - str.begin() + 1;
+                    if (keymapCount == 0)   // 최초발견했다면 갱신
+                    {
+                        keymapCount = foundPressCount;
+                    }
+                    else // 아니라면 최소값 비교
+                    {
+                        keymapCount = std::min(foundPressCount, keymapCount);
+                    }
+                }
+            }
+            if (keymapCount == 0)
+            {
+                isTargetCompleted = false;
+            }
+            else if (keymapCount > 0)
+            {
+                totalPressCount += keymapCount;
+            }
+
+            if (isTargetCompleted == false)
+            {
+                break;
             }
         }
-
 
         if (isTargetCompleted)
         {
