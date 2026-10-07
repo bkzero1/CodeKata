@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                            ⭐ 해결 완료 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
@@ -11,20 +11,22 @@ using namespace std;
 
 string solution(string s, string skip, int index) {
 	string answer = "";
-	//sort(skip.begin(), skip.end());
 
-	// 스킵테이블 만들고 해당 테이블을 미리 채움 어차피 한글자씩 확인해야 하는건 동일하니까
+	// 각 알파벳이 건너뛸 문자인지 바로 확인할 수 있도록 미리 표시
 	std::vector<bool> skipTable(26, false);
 	for (char ch : skip)
 	{
 		skipTable[ch - 'a'] = true;
 	}
 
-	for (int i = 0; i < s.size(); ++i)	// i 현재 알파벳이 있는 인덱스
+	// 문자열의 각 문자를 알파벳 인덱스로 변환해 한 글자씩 이동
+	for (int characterIndex = 0; characterIndex < s.size(); ++characterIndex)
 	{
-		int alphabetIndex = s[i] - 'a';
-		int countLeft = index;
-		while (countLeft > 0)
+		int alphabetIndex = s[characterIndex] - 'a';
+		int remainingMoveCount = index;
+
+		// skip 문자는 위치만 지나가고 실제 이동 횟수에서는 제외
+		while (remainingMoveCount > 0)
 		{
 			alphabetIndex = (alphabetIndex + 1) % 26;
 
@@ -33,12 +35,12 @@ string solution(string s, string skip, int index) {
 				continue;
 			}
 
-			--countLeft;
+			--remainingMoveCount;
 		}
 
-		s[i] = 'a' + alphabetIndex;
-
-		answer.push_back(s[i]);
+		// 최종 알파벳 인덱스를 다시 문자로 변환해 결과에 추가
+		s[characterIndex] = 'a' + alphabetIndex;
+		answer.push_back(s[characterIndex]);
 	}
 	return answer;
 }
