@@ -5,22 +5,25 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 vector<int> solution(vector<string> keymap, vector<string> targets) {
+    // 만들 수 없는 문자열은 -1이 남도록 기본값 설정
     vector<int> answer(targets.size(), -1);
 
-    // 문자열 하나, 인덱스는 answer에 넣을 위치
+    // target 하나씩 확인하고 같은 인덱스의 answer에 결과 저장
     for(int i = 0; i < targets.size(); ++i)
     {
-        // 숫자를 카운트할 변수, 0이면 없었으므로 넣지않고 answer 기본값 -1을 사용
+        // 현재 target의 전체 입력 횟수와 완성 여부
         int totalPressCount = 0;
         bool isTargetCompleted = true;
 
         const std::string& target = targets[i];
         for (char ch : target)
         {
+            // 모든 키에서 현재 문자를 찾아 가장 적은 입력 횟수만 저장
             int keymapCount = 0;
             for (const std::string& str : keymap)
             {
@@ -28,16 +31,18 @@ vector<int> solution(vector<string> keymap, vector<string> targets) {
                 if (it != str.end())
                 {
                     const int foundPressCount = it - str.begin() + 1;
-                    if (keymapCount == 0)   // 최초발견했다면 갱신
+                    if (keymapCount == 0)
                     {
                         keymapCount = foundPressCount;
                     }
-                    else // 아니라면 최소값 비교
+                    else
                     {
                         keymapCount = std::min(foundPressCount, keymapCount);
                     }
                 }
             }
+
+            // 찾지 못한 문자가 있으면 해당 target은 만들 수 없음
             if (keymapCount == 0)
             {
                 isTargetCompleted = false;
