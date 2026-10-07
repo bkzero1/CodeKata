@@ -22,18 +22,21 @@ string solution(string s, string skip, int index) {
 
 	for (int i = 0; i < s.size(); ++i)	// i 현재 알파벳이 있는 인덱스
 	{
+		int alphabetIndex = s[i] - 'a';
 		int countLeft = index;
 		while (countLeft > 0)
 		{
-			s[i] = (s[i] - 'a' + 1) % 26 + 'a';
+			alphabetIndex = (alphabetIndex + 1) % 26;
 
-			if (skipTable[s[i] - 'a'])
+			if (skipTable[alphabetIndex])
 			{
 				continue;
 			}
 
 			--countLeft;
 		}
+
+		s[i] = 'a' + alphabetIndex;
 
 		answer.push_back(s[i]);
 	}
