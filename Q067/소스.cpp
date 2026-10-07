@@ -22,15 +22,19 @@ string solution(string s, string skip, int index) {
 
 	for (int i = 0; i < s.size(); ++i)	// i 현재 알파벳이 있는 인덱스
 	{
-		// 시작인덱스 < ch < 끝인덱스 일 때 +
-		int skipCount = std::count_if(skip.begin(), skip.end(),
-			[&s, i, index](char ch)
-			{ return (s[i] - 'a' + index) < (ch - 'a'); }
-		);
+		int countLeft = index;
+		while (countLeft > 0)
+		{
+			s[i] = (s[i] - 'a' + 1) % 26 + 'a';
 
-		int realIndex = (s[i] - 'a' + index + skipCount) % 26;
-		s[i] = 'a' + realIndex;
-		
+			if (skipTable[s[i] - 'a'])
+			{
+				continue;
+			}
+
+			--countLeft;
+		}
+
 		answer.push_back(s[i]);
 	}
 	return answer;
