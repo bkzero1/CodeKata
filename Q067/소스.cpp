@@ -10,7 +10,7 @@
 using namespace std;
 
 string solution(string s, string skip, int index) {
-	string answer = "";
+	//string answer = "";
 
 	// 각 알파벳이 건너뛸 문자인지 바로 확인할 수 있도록 미리 표시
 	std::vector<bool> skipTable(26, false);
@@ -40,9 +40,9 @@ string solution(string s, string skip, int index) {
 
 		// 최종 알파벳 인덱스를 다시 문자로 변환해 결과에 추가
 		s[characterIndex] = 'a' + alphabetIndex;
-		answer.push_back(s[characterIndex]);
+		//answer.push_back(s[characterIndex]);
 	}
-	return answer;
+	return s;
 }
 
 // 입력과 기대값, 실제값을 한 줄에서 비교합니다.
