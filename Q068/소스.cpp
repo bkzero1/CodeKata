@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐ 해결 완료 ⭐ ✔ ✅
+//                            ⭐ AI 아이디어 참고 · 직접 구현 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
@@ -10,35 +10,38 @@
 
 using namespace std;
 
-// ingredient 1 - 빵 / 2 - 야채 / 3 - 고기
+// 보관용 벡터를 스택처럼 쓰는 아이디어는 AI 참고, 구현은 직접 작성
+// 재료를 하나씩 쌓고 끝에서만 확인·제거해서 중간 삭제와 재검색을 피함
+// ingredient 1 - 빵 | 2 - 야채 | 3 - 고기
 int solution(vector<int> ingredient) {
     int answer = 0;
     static const std::array<int, 4> burgerPattern{ 1, 2, 3, 1 };
-    auto patternIt = ingredient.begin();
+    
+    // 아직 사용하지 않은 재료 보관, 최대 재료 개수만큼 공간 확보
+    std::vector<int> remainingIngredients{};
+    remainingIngredients.reserve(ingredient.size());
 
-    // 남은 재료에서 햄버거 패턴을 찾고, 찾으면 개수를 늘리고 해당 재료 삭제
-    // 삭제하면 앞뒤 재료가 이어지니까 처음부터 다시 검색
-    while (patternIt != ingredient.end())
+    for (int currentIngredient : ingredient)
     {
-        patternIt = std::search(patternIt, ingredient.end(), burgerPattern.begin(), burgerPattern.end());
-        if (patternIt != ingredient.end())
+        // 재료를 하나씩 넣고, 패턴 길이보다 적으면 다음 재료로 넘어감
+        remainingIngredients.push_back(currentIngredient);
+        if (remainingIngredients.size() < burgerPattern.size())
         {
-            // 사용한 재료 삭제 후 반환된 이터레이터를 저장
-            ++answer;
-            patternIt = ingredient.erase(patternIt, patternIt + burgerPattern.size());
+            continue;
+        }
 
-            const int rewindDistance = burgerPattern.size() - 1;
-            if (patternIt - ingredient.begin() > rewindDistance)
+        // 맨 뒤 재료가 햄버거 패턴인지 확인
+        const bool isBurger = std::equal(remainingIngredients.end() - burgerPattern.size(), remainingIngredients.end(), burgerPattern.begin());
+        if (isBurger)
+        {
+            // 완성되면 개수를 늘리고 사용한 재료를 뒤에서 제거
+            ++answer;
+            for (int removedCount = 0; removedCount < burgerPattern.size(); ++removedCount)
             {
-                patternIt -= rewindDistance;
-            }
-            else
-            {
-                patternIt = ingredient.begin();
+                remainingIngredients.pop_back();
             }
         }
     }
-
     return answer;
 }
 
