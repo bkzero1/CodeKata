@@ -20,19 +20,23 @@ int solution(vector<int> ingredient) {
     // 삭제하면 앞뒤 재료가 이어지니까 처음부터 다시 검색
     while (patternIt != ingredient.end())
     {
-        patternIt = std::search(ingredient.begin(), ingredient.end(), burgerPattern.begin(), burgerPattern.end());
+        patternIt = std::search(patternIt, ingredient.end(), burgerPattern.begin(), burgerPattern.end());
         if (patternIt != ingredient.end())
         {
             // 사용한 재료 삭제 후 반환된 이터레이터를 저장
             ++answer;
             patternIt = ingredient.erase(patternIt, patternIt + burgerPattern.size());
-        }
 
-        // 못 찾았거나 삭제한 구간 뒤에 재료가 없으면 종료 (while 조건과 중복)
-        //if (patternIt == ingredient.end())
-        //{
-        //    break;
-        //}
+            const int rewindDistance = burgerPattern.size() - 1;
+            if (patternIt - ingredient.begin() > rewindDistance)
+            {
+                patternIt -= rewindDistance;
+            }
+            else
+            {
+                patternIt = ingredient.begin();
+            }
+        }
     }
 
     return answer;
