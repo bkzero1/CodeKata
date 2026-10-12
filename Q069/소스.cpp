@@ -28,39 +28,24 @@ string solution(vector<string> survey, vector<int> choices) {
     {
         int adjustedChoice = choices[i] - neutralChoiceValue; // -3 ~ 3 범위로 변경
 
-        switch (survey[i].front())
+        for (int index = 0; index < indicatorScores.size(); ++index)
         {
-        case 'R':
-            indicatorScores[0] += adjustedChoice;
-            break;
-        case 'T':
-            adjustedChoice *= reverseMultiplier; // 범위 반전
-            indicatorScores[0] += adjustedChoice;
-            break;
-
-        case 'C':
-            indicatorScores[1] += adjustedChoice;
-            break;
-        case 'F':
-            adjustedChoice *= reverseMultiplier;
-            indicatorScores[1] += adjustedChoice;
-            break;
-
-        case 'J':
-            indicatorScores[2] += adjustedChoice;
-            break;
-        case 'M':
-            adjustedChoice *= reverseMultiplier;
-            indicatorScores[2] += adjustedChoice;
-            break;
-
-        case 'A':
-            indicatorScores[3] += adjustedChoice;
-            break;
-        case 'N':
-            adjustedChoice *= reverseMultiplier;
-            indicatorScores[3] += adjustedChoice;
-            break;
+            const auto position = personalityPairs[index].find(survey[i].front());
+            if (position == 0)
+            {
+                indicatorScores[index] += adjustedChoice;
+                break;
+            }
+            else if (position == 1)
+            {
+                adjustedChoice *= reverseMultiplier;
+                indicatorScores[index] += adjustedChoice;
+                break;
+            }
+            else
+            {
+                continue;
+            }
         }
     }
 
