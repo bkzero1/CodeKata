@@ -13,51 +13,49 @@ string solution(vector<string> survey, vector<int> choices) {
     const int neutralChoiceValue = 4;  // 선택값에서 빼서 -3 ~ 3으로 변환
     const int reverseMultiplier = -1;  // 유형 순서가 반대면 점수 방향을 뒤집음
 
-    const std::vector<std::string> personalityPairs = {
-        "RT",
-        "CF",
-        "JM",
-        "AN",
-    };
+    // TODO: "RTCFJMAN" 한 문자열의 문자 위치로 지표와 점수 방향을 찾는 풀이 완성해보기
+    //const std::string personalityString = {"RT" "CF" "JM" "AN"};
+    const std::string personalityString = "RT" "CF" "JM" "AN";
     
     // 각 지표의 앞 유형과 뒤 유형 사이의 점수 차이 / 사전순 RT, CF, JM, AN
     std::vector<int> indicatorScores(4, 0);
 
+
     // 점수 계산
-    for (int i = 0; i < survey.size(); ++i)
-    {
-        int adjustedChoice = choices[i] - neutralChoiceValue; // -3 ~ 3 범위로 변경
+    //for (int i = 0; i < survey.size(); ++i)
+    //{
+    //    int adjustedChoice = choices[i] - neutralChoiceValue; // -3 ~ 3 범위로 변경
 
-        for (int indicatorIndex = 0; indicatorIndex < indicatorScores.size(); ++indicatorIndex)
-        {
-            const auto positionInPair = personalityPairs[indicatorIndex].find(survey[i].front());
-            if (positionInPair == std::string::npos)
-            {
-                continue;
-            }
+    //    for (int indicatorIndex = 0; indicatorIndex < indicatorScores.size(); ++indicatorIndex)
+    //    {
+    //        const auto positionInPair = personalityPairs[indicatorIndex].find(survey[i].front());
+    //        if (positionInPair == std::string::npos)
+    //        {
+    //            continue;
+    //        }
 
-            if (positionInPair == 1)
-            {
-                adjustedChoice *= reverseMultiplier;
-            }
+    //        if (positionInPair == 1)
+    //        {
+    //            adjustedChoice *= reverseMultiplier;
+    //        }
 
-            indicatorScores[indicatorIndex] += adjustedChoice;
-            break;
-        }
-    }
+    //        indicatorScores[indicatorIndex] += adjustedChoice;
+    //        break;
+    //    }
+    //}
 
-    // 점수 차이에 따라 각 지표의 최종 유형 결정
-    for (int i = 0; i < indicatorScores.size(); ++i)
-    {
-        if (indicatorScores[i] <= 0)
-        {
-            answer += personalityPairs[i].front();
-        }
-        else
-        {
-            answer += personalityPairs[i].back();
-        }
-    }
+    //// 점수 차이에 따라 각 지표의 최종 유형 결정
+    //for (int i = 0; i < indicatorScores.size(); i + 2)
+    //{
+    //    if (indicatorScores[i] <= 0)
+    //    {
+    //        answer += personalityPairs[i].front();
+    //    }
+    //    else
+    //    {
+    //        answer += personalityPairs[i].back();
+    //    }
+    //}
 
     return answer;
 }
