@@ -26,40 +26,40 @@ string solution(vector<string> survey, vector<int> choices) {
     // 점수 계산
     for (int i = 0; i < survey.size(); ++i)
     {
-        choices[i] -= neutralChoiceValue; // 우선 범위를 -3 ~ 3 으로
+        int adjustedChoice = choices[i] - neutralChoiceValue; // -3 ~ 3 범위로 변경
 
         switch (survey[i].front())
         {
         case 'R':
-            indicatorScores[0] += choices[i];
+            indicatorScores[0] += adjustedChoice;
             break;
         case 'T':
-            choices[i] *= reverseMultiplier; // 범위 반전
-            indicatorScores[0] += choices[i];
+            adjustedChoice *= reverseMultiplier; // 범위 반전
+            indicatorScores[0] += adjustedChoice;
             break;
-        
+
         case 'C':
-            indicatorScores[1] += choices[i];
+            indicatorScores[1] += adjustedChoice;
             break;
         case 'F':
-            choices[i] *= reverseMultiplier;
-            indicatorScores[1] += choices[i];
+            adjustedChoice *= reverseMultiplier;
+            indicatorScores[1] += adjustedChoice;
             break;
-        
+
         case 'J':
-            indicatorScores[2] += choices[i];
+            indicatorScores[2] += adjustedChoice;
             break;
         case 'M':
-            choices[i] *= reverseMultiplier;
-            indicatorScores[2] += choices[i];
+            adjustedChoice *= reverseMultiplier;
+            indicatorScores[2] += adjustedChoice;
             break;
-        
+
         case 'A':
-            indicatorScores[3] += choices[i];
+            indicatorScores[3] += adjustedChoice;
             break;
         case 'N':
-            choices[i] *= reverseMultiplier;
-            indicatorScores[3] += choices[i];
+            adjustedChoice *= reverseMultiplier;
+            indicatorScores[3] += adjustedChoice;
             break;
         }
     }
