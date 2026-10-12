@@ -31,21 +31,18 @@ string solution(vector<string> survey, vector<int> choices) {
         for (int index = 0; index < indicatorScores.size(); ++index)
         {
             const auto position = personalityPairs[index].find(survey[i].front());
-            if (position == 0)
-            {
-                indicatorScores[index] += adjustedChoice;
-                break;
-            }
-            else if (position == 1)
-            {
-                adjustedChoice *= reverseMultiplier;
-                indicatorScores[index] += adjustedChoice;
-                break;
-            }
-            else
+            if (position == std::string::npos)
             {
                 continue;
             }
+
+            if (position == 1)
+            {
+                adjustedChoice *= reverseMultiplier;
+            }
+
+            indicatorScores[index] += adjustedChoice;
+            break;
         }
     }
 
