@@ -28,20 +28,20 @@ string solution(vector<string> survey, vector<int> choices) {
     {
         int adjustedChoice = choices[i] - neutralChoiceValue; // -3 ~ 3 범위로 변경
 
-        for (int index = 0; index < indicatorScores.size(); ++index)
+        for (int indicatorIndex = 0; indicatorIndex < indicatorScores.size(); ++indicatorIndex)
         {
-            const auto position = personalityPairs[index].find(survey[i].front());
-            if (position == std::string::npos)
+            const auto positionInPair = personalityPairs[indicatorIndex].find(survey[i].front());
+            if (positionInPair == std::string::npos)
             {
                 continue;
             }
 
-            if (position == 1)
+            if (positionInPair == 1)
             {
                 adjustedChoice *= reverseMultiplier;
             }
 
-            indicatorScores[index] += adjustedChoice;
+            indicatorScores[indicatorIndex] += adjustedChoice;
             break;
         }
     }
