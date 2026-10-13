@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                            ⭐ 풀이 완료 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
@@ -21,18 +21,16 @@ vector<int> solution(vector<string> wallpaper) {
         auto positionMax = currentWallpaper.rfind('#');
         if (positionMin != std::string::npos)
         {
-            
             if (answer[0] == sentinel)
             {
-                answer[0] = y;
+                answer[0] = y;  // 처음 파일을 발견한 행이 곧 최소 y
                 answer[1] = static_cast<int>(positionMin);
             }
-            answer[0] = std::min(answer[0], y);
+
             answer[1] = std::min(answer[1], static_cast<int>(positionMin));
-            
-            // 한 행에서 min을 발견했다면 max도 있으므로 이 if에서 검사 가능
-            answer[2] = std::max(answer[2], y + 1);
-            answer[3] = std::max(answer[3], static_cast<int>(positionMax) + 1); 
+
+            answer[2] = y + 1;  // 마지막으로 파일을 발견한 행이 곧 최대 y
+            answer[3] = std::max(answer[3], static_cast<int>(positionMax) + 1);
         }
     }
 
