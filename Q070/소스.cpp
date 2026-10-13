@@ -10,17 +10,37 @@
 using namespace std;
 
 vector<int> solution(vector<string> wallpaper) {
-    vector<int> answer(4, 0);   // y1(minY) x1(minX) y2(maxY + 1) x2(maxX + 1)
+    int sentinel = -1;
+    vector<int> answer(4, sentinel);   // y1(minY) x1(minX) y2(maxY + 1) x2(maxX + 1)
 
-    
+    for (int y = 0; y < wallpaper.size(); ++y)
+    {
+        const std::string& currentWallpaper = wallpaper[y];
+
+        auto positionMin = currentWallpaper.find('#');
+        auto positionMax = currentWallpaper.rfind('#');
+        if (positionMin != std::string::npos)
+        {
+            if (answer[1] == sentinel)
+            {
+                answer[1] = static_cast<int>(positionMin);
+            }
+            answer[1] = std::min(answer[1], static_cast<int>(positionMin));
+            
+            // 한 행에서 min을 발견했다면 max도 있으므로 여 if에서 검사 가능
+            answer[3] = std::max(answer[3], static_cast<int>(positionMax) + 1); 
+        }
+        
+    }
+
     // [".#...", "..#..", "...#."]
     // ["..", "#."]
     // ["..........", ".....#....", "......##..", "...##.....", "....#....."]
     // x1, y1, x2, y2
     // y1 = 제일 위쪽에 있는 해시번호 그대로
-    // x1 = 제일 앞쪽에 있는 해시번호 그대로
+    // x1 = 제일 앞쪽에 있는 해시번호 그대로 ok
     // y2 = 제일 밑쪽에 있는 해시번호 + 1
-    // x2 = 제일 끝쪽에 있는 해시번호 + 1
+    // x2 = 제일 끝쪽에 있는 해시번호 + 1 ok
     return answer;
 }
 
