@@ -18,30 +18,25 @@ vector<int> solution(vector<string> wallpaper) {
         const std::string& currentWallpaper = wallpaper[y];
 
         auto positionMin = currentWallpaper.find('#');
-        auto positionMax = currentWallpaper.rfind('#');
-        if (positionMin != std::string::npos)
+        if (positionMin == std::string::npos)
         {
-            if (answer[0] == sentinel)
-            {
-                answer[0] = y;  // 처음 파일을 발견한 행이 곧 최소 y
-                answer[1] = static_cast<int>(positionMin);
-            }
-
-            answer[1] = std::min(answer[1], static_cast<int>(positionMin));
-
-            answer[2] = y + 1;  // 마지막으로 파일을 발견한 행이 곧 최대 y
-            answer[3] = std::max(answer[3], static_cast<int>(positionMax) + 1);
+            continue;
         }
-    }
 
-    // [".#...", "..#..", "...#."]
-    // ["..", "#."]
-    // ["..........", ".....#....", "......##..", "...##.....", "....#....."]
-    // x1, y1, x2, y2
-    // y1 = 제일 위쪽에 있는 해시번호 그대로
-    // x1 = 제일 앞쪽에 있는 해시번호 그대로 ok
-    // y2 = 제일 밑쪽에 있는 해시번호 + 1
-    // x2 = 제일 끝쪽에 있는 해시번호 + 1 ok
+        auto positionMax = currentWallpaper.rfind('#');
+
+        if (answer[0] == sentinel)
+        {
+            answer[0] = y;  // 처음 파일을 발견한 행이 곧 최소 y
+            answer[1] = static_cast<int>(positionMin);
+        }
+
+        answer[1] = std::min(answer[1], static_cast<int>(positionMin));
+
+        answer[2] = y + 1;  // 마지막으로 파일을 발견한 행이 곧 최대 y
+        answer[3] = std::max(answer[3], static_cast<int>(positionMax) + 1);
+    }
+    
     return answer;
 }
 
