@@ -1,12 +1,14 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                            ⭐ 해결 완료 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
 #include <vector>
+#include <array>
 
 using namespace std;
+
 int convertDateToDays(const std::string& date)
 {
     constexpr int monthsPerYear = 12;
@@ -26,11 +28,30 @@ int calculateDaysBetween(const std::string& today, const std::string& collection
 
 vector<int> solution(string today, vector<string> terms, vector<string> privacies) {
     vector<int> answer;
-    
+    constexpr int daysPerMonth = 28;
+    constexpr int alphabetSize = 26;
+    std::array<int, alphabetSize> termsTable{};
+    for (const std::string& term : terms)
+    {
+        int typeIndex = term.front() - 'A';
+        
+        termsTable[typeIndex] = daysPerMonth * std::stoi(term.substr(2));
+        //cout << static_cast<char>(typeIndex + 'A') << ":" << termsTable[typeIndex] << " ";
+    }
+
     for (int i = 0; i < privacies.size(); ++i)
     {
-        const std::string& str = privacies[i];
-        cout << "str: " << str << " ";
+        std::string& privacy = privacies[i];
+        char typeIndex = privacies[i].back() - 'A';
+
+        // 뒤의 문자 두개 제거
+        //privacy.resize(privacy.size() - 2);
+        privacy.erase(privacy.size() - 2);
+
+        if (calculateDaysBetween(today, privacy) >= termsTable[typeIndex])
+        {
+            answer.push_back(i + 1);
+        }
     }
     return answer;
 }
