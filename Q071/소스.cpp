@@ -30,27 +30,27 @@ vector<int> solution(string today, vector<string> terms, vector<string> privacie
     vector<int> answer;
     constexpr int daysPerMonth = 28;
     constexpr int alphabetSize = 26;
-    std::array<int, alphabetSize> termsTable{};
+    std::array<int, alphabetSize> termDurationDaysByType{};
+
+    // 약관 종류를 인덱스로 사용해 유효기간을 일 단위로 저장
     for (const std::string& term : terms)
     {
-        int typeIndex = term.front() - 'A';
-        
-        termsTable[typeIndex] = daysPerMonth * std::stoi(term.substr(2));
-        //cout << static_cast<char>(typeIndex + 'A') << ":" << termsTable[typeIndex] << " ";
+        const int termTypeIndex = term.front() - 'A';
+        termDurationDaysByType[termTypeIndex] = daysPerMonth * std::stoi(term.substr(2));
     }
 
-    for (int i = 0; i < privacies.size(); ++i)
+    for (int privacyIndex = 0; privacyIndex < privacies.size(); ++privacyIndex)
     {
-        std::string& privacy = privacies[i];
-        char typeIndex = privacies[i].back() - 'A';
+        std::string& privacy = privacies[privacyIndex];
+        const int termTypeIndex = privacy.back() - 'A';
 
-        // 뒤의 문자 두개 제거
-        //privacy.resize(privacy.size() - 2);
+        // 뒤의 공백과 약관 종류를 지워 수집일만 남김
         privacy.erase(privacy.size() - 2);
 
-        if (calculateDaysBetween(today, privacy) >= termsTable[typeIndex])
+        // 유효기간 이상 지났다면 파기할 개인정보 번호를 저장
+        if (calculateDaysBetween(today, privacy) >= termDurationDaysByType[termTypeIndex])
         {
-            answer.push_back(i + 1);
+            answer.push_back(privacyIndex + 1);
         }
     }
     return answer;
