@@ -6,15 +6,34 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 
 using namespace std;
 
 vector<string> solution(vector<string> players, vector<string> callings) {
+    std::unordered_map<std::string, int> playerRank;
+    for (int i = 0; i < players.size(); ++i)
+    {
+        playerRank[players[i]] = i;
+    }
+    //for (auto pairs : playerRank)
+    //{
+    //    cout << pairs.first << " " << pairs.second << endl;
+    //}
+
     for (const std::string& callingPlayer : callings)
     {
-        auto it = std::find(players.begin(), players.end(), callingPlayer);
-        // 문제 조건에서 1등은 불리지 않는다고 했으므로 항상 it - 1 접근 가능
-        std::swap(*it, *(it - 1));
+        auto callingPair = playerRank.find(callingPlayer);
+
+        // 바꾸기전에 바뀔 플레이어 이름 백업
+        const std::string swappedPlayerName = players[callingPair->second - 1];
+
+        // 순위 적용
+        std::swap(players[callingPair->second], players[callingPair->second - 1]);
+
+        // 맵에 바뀐 순위 반영
+        --callingPair->second;
+        ++playerRank[swappedPlayerName];
     }
 
     return players;
