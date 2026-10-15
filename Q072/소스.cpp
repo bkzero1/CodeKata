@@ -5,35 +5,31 @@
 
 #include <string>
 #include <vector>
-#include <algorithm>
 #include <unordered_map>
+#include <utility>
 
 using namespace std;
 
 vector<string> solution(vector<string> players, vector<string> callings) {
-    std::unordered_map<std::string, int> playerRank;
+    std::unordered_map<std::string, int> playerIndexByName;
+
+    // 선수 이름으로 현재 인덱스를 바로 찾을 수 있도록 저장
     for (int i = 0; i < players.size(); ++i)
     {
-        playerRank[players[i]] = i;
+        playerIndexByName[players[i]] = i;
     }
-    //for (auto pairs : playerRank)
-    //{
-    //    cout << pairs.first << " " << pairs.second << endl;
-    //}
 
     for (const std::string& callingPlayer : callings)
     {
-        auto callingPair = playerRank.find(callingPlayer);
+        auto calledPlayerIt = playerIndexByName.find(callingPlayer);
 
-        // 바꾸기전에 바뀔 플레이어 이름 백업
-        const std::string swappedPlayerName = players[callingPair->second - 1];
+        // 교환 후에도 사용할 수 있도록 앞 선수 이름을 복사
+        const std::string frontPlayerName = players[calledPlayerIt->second - 1];
 
-        // 순위 적용
-        std::swap(players[callingPair->second], players[callingPair->second - 1]);
-
-        // 맵에 바뀐 순위 반영
-        --callingPair->second;
-        ++playerRank.at(swappedPlayerName);
+        // 실제 순위와 맵에 저장된 두 선수의 인덱스를 함께 갱신
+        std::swap(players[calledPlayerIt->second], players[calledPlayerIt->second - 1]);
+        --calledPlayerIt->second;
+        ++playerIndexByName.at(frontPlayerName);
     }
 
     return players;
