@@ -14,9 +14,9 @@ vector<string> solution(vector<string> players, vector<string> callings) {
     std::unordered_map<std::string, int> playerIndexByName;
 
     // 선수 이름으로 현재 인덱스를 바로 찾을 수 있도록 저장
-    for (int i = 0; i < players.size(); ++i)
+    for (int playerIndex = 0; playerIndex < players.size(); ++playerIndex)
     {
-        playerIndexByName[players[i]] = i;
+        playerIndexByName[players[playerIndex]] = playerIndex;
     }
 
     for (const std::string& callingPlayer : callings)
