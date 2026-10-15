@@ -33,7 +33,7 @@ vector<string> solution(vector<string> players, vector<string> callings) {
 
         // 맵에 바뀐 순위 반영
         --callingPair->second;
-        ++playerRank[swappedPlayerName];
+        ++playerRank.at(swappedPlayerName);
     }
 
     return players;
