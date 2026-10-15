@@ -10,7 +10,7 @@
 using namespace std;
 
 vector<string> solution(vector<string> players, vector<string> callings) {
-    for (std::string& callingPlayer : callings)
+    for (const std::string& callingPlayer : callings)
     {
         auto it = std::find(players.begin(), players.end(), callingPlayer);
         // 문제 조건에서 1등은 불리지 않는다고 했으므로 항상 it - 1 접근 가능
