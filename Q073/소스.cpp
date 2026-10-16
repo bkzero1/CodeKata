@@ -1,29 +1,24 @@
 ﻿#include <iostream>
 //==========================================================================
-//                       ⭐ 해결 완료 ⭐ ✔ ✅
+//              ⭐ 해결 완료 ⭐ ✔ ✅ | AI 코칭 리팩터링
 //==========================================================================
 
 #include <string>
 #include <vector>
 
 using namespace std;
-struct Position
-{
-    int y = 0;
-    int x = 0;
-};
 
 vector<int> solution(vector<string> park, vector<string> routes) {
     int currentY = 0;
     int currentX = 0;
 
-    // 일단 S를 찾아
+    // 공원 전체를 탐색해 시작 지점의 좌표를 찾음
     bool foundStart = false;
-    int maxYSize = park.size();
-    int maxXSize = park[0].size();
-    for (int y = 0; y < maxYSize; ++y)
+    const int parkHeight = static_cast<int>(park.size());
+    const int parkWidth = static_cast<int>(park[0].size());
+    for (int y = 0; y < parkHeight; ++y)
     {
-        for (int x = 0; x < maxXSize; ++x)
+        for (int x = 0; x < parkWidth; ++x)
         {
             if (park[y][x] == 'S')
             {
@@ -41,102 +36,65 @@ vector<int> solution(vector<string> park, vector<string> routes) {
         }
     }
 
-    //cout << park[currentY][currentX] << endl;
-
-    // 찾았으면 해당 위치부터 시작
+    // 각 명령의 방향을 한 칸 이동할 때의 좌표 변화량으로 변환
     for (const std::string& order : routes)
     {
-        const char& orderDirection = order.front();
-        int traveledDistance = order.back() - '0';
+        const char direction = order.front();
+        const int distance = order.back() - '0';
         
-        // 이동 가능한 범위인지 확인해서 이동 가능할때만 이동
-        // N -> +y / S -> -y
-        // E -> +x / W -> -x
-        switch (orderDirection)
+        int stepY = 0;
+        int stepX = 0;
+        switch (direction)
         {
-        case 'N':   // +y -> 배열상에서는 -
-        {
-            // 이동 목적지가 배열 범위 안이거나, 중간에 X가 없을때만 이동
-            int movementRange = currentY - traveledDistance;
-            if (movementRange >= 0)
-            {
-                bool bCanThere = true;
-                for (int i = 1; i <= traveledDistance; ++i)
-                {
-                    if (park[currentY - i][currentX] == 'X')
-                    {
-                        bCanThere = false;
-                    }
-                }
-                if (bCanThere)
-                {
-                    currentY -= traveledDistance;
-                }
-            }
+        case 'N':
+            stepY = -1;
             break;
-        } // 'N'
-        case 'S':   // -y -> 배열상에서는 +
-        {
-            int movementRange = currentY + traveledDistance;
-            if (movementRange < maxYSize)
-            {
-                bool bCanThere = true;
-                for (int i = 1; i <= traveledDistance; ++i)
-                {
-                    if (park[currentY + i][currentX] == 'X')
-                    {
-                        bCanThere = false;
-                    }
-                }
-                if (bCanThere)
-                {
-                    currentY += traveledDistance;
-                }
-            }
+        case 'S':
+            stepY = 1;
             break;
-        } // 'S'
+        case 'E':
+            stepX = 1;
+            break;
+        case 'W':
+            stepX = -1;
+            break;
+        }
 
-        case 'E':   // +x
+        // 목적지가 공원 범위를 벗어나는지 확인
+        const int targetY = currentY + stepY * distance;
+        const int targetX = currentX + stepX * distance;
+        bool canMove = true;
+
+        if (targetY < 0 || targetY >= parkHeight)
         {
-            int movementRange = currentX + traveledDistance;
-            if (movementRange < maxXSize)
+            canMove = false;
+        }
+        if (targetX < 0 || targetX >= parkWidth)
+        {
+            canMove = false;
+        }
+
+        // 목적지가 범위 안이면 이동 경로와 목적지에 장애물이 있는지 확인
+        if (canMove)
+        {
+            for (int stepCount = 1; stepCount <= distance; ++stepCount)
             {
-                bool bCanThere = true;
-                for (int i = 1; i <= traveledDistance; ++i)
+                const int checkY = currentY + stepY * stepCount;
+                const int checkX = currentX + stepX * stepCount;
+
+                if (park[checkY][checkX] == 'X')
                 {
-                    if (park[currentY][currentX + i] == 'X')
-                    {
-                        bCanThere = false;
-                    }
-                }
-                if (bCanThere)
-                {
-                    currentX += traveledDistance;
+                    canMove = false;
                 }
             }
-            break;
-        } // 'E'
-        case 'W':   // -x
+        }
+
+        // 모든 검사를 통과한 명령만 현재 위치에 반영
+        if (canMove)
         {
-            int movementRange = currentX - traveledDistance;
-            if (movementRange >= 0)
-            {
-                bool bCanThere = true;
-                for (int i = 1; i <= traveledDistance; ++i)
-                {
-                    if (park[currentY][currentX - i] == 'X')
-                    {
-                        bCanThere = false;
-                    }
-                }
-                if (bCanThere)
-                {
-                    currentX -= traveledDistance;
-                }
-            }
-            break;
-        } // 'W'
-        }//switch
+            currentY = targetY;
+            currentX = targetX;
+        }
     }
 
     return { currentY, currentX };
