@@ -85,6 +85,7 @@ vector<int> solution(vector<string> park, vector<string> routes) {
                 if (park[checkY][checkX] == 'X')
                 {
                     canMove = false;
+                    break;
                 }
             }
         }
