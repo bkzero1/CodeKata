@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                       ⭐ 해결 완료 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
@@ -14,7 +14,6 @@ struct Position
 };
 
 vector<int> solution(vector<string> park, vector<string> routes) {
-    vector<int> answer;
     int currentY = 0;
     int currentX = 0;
 
@@ -53,36 +52,94 @@ vector<int> solution(vector<string> park, vector<string> routes) {
         // 이동 가능한 범위인지 확인해서 이동 가능할때만 이동
         // N -> +y / S -> -y
         // E -> +x / W -> -x
-        if (orderDirection == 'N')
+        switch (orderDirection)
         {
-            if (currentY + traveledDistance < maxYSize)
+        case 'N':   // +y -> 배열상에서는 -
+        {
+            // 이동 목적지가 배열 범위 안이거나, 중간에 X가 없을때만 이동
+            int movementRange = currentY - traveledDistance;
+            if (movementRange >= 0)
             {
-                for (int i = traveledDistance; i > 0; --i)
+                bool bCanThere = true;
+                for (int i = 1; i <= traveledDistance; ++i)
                 {
-                    if (park[i][currentX] == 'X')
+                    if (park[currentY - i][currentX] == 'X')
                     {
-
+                        bCanThere = false;
                     }
                 }
-                currentY += traveledDistance;
+                if (bCanThere)
+                {
+                    currentY -= traveledDistance;
+                }
             }
-        }
-        else if (orderDirection == 'S')
+            break;
+        } // 'N'
+        case 'S':   // -y -> 배열상에서는 +
         {
+            int movementRange = currentY + traveledDistance;
+            if (movementRange < maxYSize)
+            {
+                bool bCanThere = true;
+                for (int i = 1; i <= traveledDistance; ++i)
+                {
+                    if (park[currentY + i][currentX] == 'X')
+                    {
+                        bCanThere = false;
+                    }
+                }
+                if (bCanThere)
+                {
+                    currentY += traveledDistance;
+                }
+            }
+            break;
+        } // 'S'
 
-        }
-        else if (orderDirection == 'E')
+        case 'E':   // +x
         {
-
-        }
-        else if (orderDirection == 'W')
+            int movementRange = currentX + traveledDistance;
+            if (movementRange < maxXSize)
+            {
+                bool bCanThere = true;
+                for (int i = 1; i <= traveledDistance; ++i)
+                {
+                    if (park[currentY][currentX + i] == 'X')
+                    {
+                        bCanThere = false;
+                    }
+                }
+                if (bCanThere)
+                {
+                    currentX += traveledDistance;
+                }
+            }
+            break;
+        } // 'E'
+        case 'W':   // -x
         {
-
-        }
-        
+            int movementRange = currentX - traveledDistance;
+            if (movementRange >= 0)
+            {
+                bool bCanThere = true;
+                for (int i = 1; i <= traveledDistance; ++i)
+                {
+                    if (park[currentY][currentX - i] == 'X')
+                    {
+                        bCanThere = false;
+                    }
+                }
+                if (bCanThere)
+                {
+                    currentX -= traveledDistance;
+                }
+            }
+            break;
+        } // 'W'
+        }//switch
     }
 
-    return answer;
+    return { currentY, currentX };
 }
 
 // 문자열 벡터를 입력값 그대로 표시
