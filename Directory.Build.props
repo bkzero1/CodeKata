@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <!-- CodeKata 하위 C++ 프로젝트의 언어 표준을 C++17로 통일 -->
+    <LanguageStandard>stdcpp17</LanguageStandard>
+  </PropertyGroup>
+</Project>
