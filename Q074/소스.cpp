@@ -13,55 +13,44 @@ using namespace std;
 
 // id_list 순서대로 각 이용자가 받는 정지 안내 메일 수를 반환
 vector<int> solution(vector<string> id_list, vector<string> report, int k) {
-    // id_list에 담긴 id 순서대로 각 유저가 받은 결과 메일 수
+    // id_list의 순서와 동일한 위치에 각 이용자의 메일 수를 저장
     vector<int> answer(id_list.size(), 0);
 
-    // 신고 대상별 신고자 집합을 저장하여 같은 대상에 대한 중복 신고를 제거
+    // 키는 신고 대상 ID, 값은 중복을 제거한 신고자 ID 집합
     std::unordered_map<std::string, std::unordered_set<std::string>> reportersByReportedUser;
 
+    // 각 신고를 분리하여 대상별 신고자 집합에 추가
     for (const std::string& reportEntry : report)
     {
         const auto spacePosition = reportEntry.find(' ');
 
         // 공백을 기준으로 신고자와 신고 대상을 분리
         const std::string reporter = reportEntry.substr(0, spacePosition);
-
         const std::string reportedUser = reportEntry.substr(spacePosition + 1);
 
         reportersByReportedUser[reportedUser].insert(reporter);
     }
 
-    // 신고 대상별 신고자 목록을 확인하는 디버그 출력
-    //for (const auto& reportedUserEntry : reportersByReportedUser)
-    //{
-    //    cout << reportedUserEntry.first << ": ";
-    //    for (const auto& reporter : reportedUserEntry.second)
-    //    {
-    //        cout << reporter << " ";
-    //    }
-    //    cout << endl;
-    //    cout << "reporter count: " << reportedUserEntry.second.size() << endl;
-    //}
-    
-    // 이용자별로 정지 대상의 신고자 집합을 확인하여 메일 수를 집계
-    // 서로 다른 신고자 수가 k 이상이고 현재 이용자가 신고한 대상이면 1회 증가
+    // 신고자 ID로 answer의 위치를 바로 찾기 위한 이름 → 인덱스 맵 생성
+    std::unordered_map<std::string, int> userIndexById;
     for (int userIndex = 0; userIndex < id_list.size(); ++userIndex)
     {
-        const std::string& reporter = id_list[userIndex];
-        for (const auto& reportedUserEntry : reportersByReportedUser)
+        const std::string& userId = id_list[userIndex];
+        userIndexById[userId] = userIndex;
+    }
+
+    // 정지 기준을 충족한 대상의 신고자만 순회하며 해당 이용자의 메일 수 증가
+    for (const auto& reportedUserEntry : reportersByReportedUser)
+    {
+        if (reportedUserEntry.second.size() >= k)
         {
-            int uniqueReporterCount = reportedUserEntry.second.size();
-            if (uniqueReporterCount >= k)
+            for (const std::string& reporter : reportedUserEntry.second)
             {
-                auto reporterIt = find(reportedUserEntry.second.begin(), reportedUserEntry.second.end(), reporter);
-                if (reporterIt != reportedUserEntry.second.end())
-                {
-                    ++answer[userIndex];
-                }
+                ++answer[userIndexById.at(reporter)];
             }
         }
     }
-  
+
     return answer;
 }
 
