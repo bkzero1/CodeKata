@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                         ⭐ AI 도움 받아서 해결 완료, 다시 풀어볼 것 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
@@ -11,50 +11,57 @@
 
 using namespace std;
 
-// 이용자의 ID가 담긴 문자열 배열 id_list, 
-// 각 이용자가 신고한 이용자의 ID 정보가 담긴 문자열 배열 report
-// 정지 기준이 되는 신고 횟수 k
+// id_list 순서대로 각 이용자가 받는 정지 안내 메일 수를 반환
 vector<int> solution(vector<string> id_list, vector<string> report, int k) {
     // id_list에 담긴 id 순서대로 각 유저가 받은 결과 메일 수
-    vector<int> answer;
+    vector<int> answer(id_list.size(), 0);
 
-    // 키 - 신고받은 사람 / 값 - 신고한 사람 / 값의 원소갯수가 k보다 크면 answer + 1
+    // 신고 대상별 신고자 집합을 저장하여 같은 대상에 대한 중복 신고를 제거
     std::unordered_map<std::string, std::unordered_set<std::string>> reportersByReportedUser;
 
     for (const std::string& reportEntry : report)
     {
         const auto spacePosition = reportEntry.find(' ');
 
-        // 공백 앞: 신고한 사람
+        // 공백을 기준으로 신고자와 신고 대상을 분리
         const std::string reporter = reportEntry.substr(0, spacePosition);
 
-        // 공백 뒤부터 끝까지: 신고당한 사람
         const std::string reportedUser = reportEntry.substr(spacePosition + 1);
 
         reportersByReportedUser[reportedUser].insert(reporter);
     }
 
-    //for (const auto& reporter : reportersByReportedUser)
+    // 신고 대상별 신고자 목록을 확인하는 디버그 출력
+    //for (const auto& reportedUserEntry : reportersByReportedUser)
     //{
-    //    cout << reporter.first << ": ";
-    //    for (const auto& str : reporter.second)
+    //    cout << reportedUserEntry.first << ": ";
+    //    for (const auto& reporter : reportedUserEntry.second)
     //    {
-    //        cout << str << " ";
+    //        cout << reporter << " ";
     //    }
     //    cout << endl;
-    //    cout << "reporter.second.size(): " << reporter.second.size() << endl;
+    //    cout << "reporter count: " << reportedUserEntry.second.size() << endl;
     //}
     
-    for (const std::string& reporter : id_list)
+    // 이용자별로 정지 대상의 신고자 집합을 확인하여 메일 수를 집계
+    // 서로 다른 신고자 수가 k 이상이고 현재 이용자가 신고한 대상이면 1회 증가
+    for (int userIndex = 0; userIndex < id_list.size(); ++userIndex)
     {
-        int reportedCount = reportersByReportedUser[reporter].size();
-        if (reportedCount >= k)
+        const std::string& reporter = id_list[userIndex];
+        for (const auto& reportedUserEntry : reportersByReportedUser)
         {
-            answer.push_back(reportedCount);
+            int uniqueReporterCount = reportedUserEntry.second.size();
+            if (uniqueReporterCount >= k)
+            {
+                auto reporterIt = find(reportedUserEntry.second.begin(), reportedUserEntry.second.end(), reporter);
+                if (reporterIt != reportedUserEntry.second.end())
+                {
+                    ++answer[userIndex];
+                }
+            }
         }
     }
   
-
     return answer;
 }
 
