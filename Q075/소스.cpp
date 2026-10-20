@@ -5,31 +5,33 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 string solution(string s) {
-    int minStr;
-    int maxStr;
+    int minValue;
+    int maxValue;
 
-    auto it = s.find(' ');
-    minStr = std::stoi(s.substr(0, it));
-    maxStr = minStr;
+    // 첫 번째 정수로 최솟값과 최댓값을 초기화
+    auto spacePosition = s.find(' ');
+    minValue = std::stoi(s.substr(0, spacePosition));
+    maxValue = minValue;
 
-    std::string remainStr = s.substr(it + 1);
-
-    while (it != std::string::npos)
+    // 원본은 유지하고 공백 위치를 옮기며 각 정수 구간만 변환
+    // 마지막 구간은 다음 공백이 없어도 substr가 문자열 끝까지만 가져옴
+    while (spacePosition != std::string::npos)
     {
-        it = remainStr.find(' ');
-        int digit = std::stoi(remainStr.substr(0, it));
+        const auto nextSpacePosition = s.find(' ', spacePosition + 1);
+        int number = std::stoi(s.substr(spacePosition + 1, nextSpacePosition - (spacePosition + 1)));
 
-        minStr = std::min(minStr, digit);
-        maxStr = std::max(maxStr, digit);
+        minValue = std::min(minValue, number);
+        maxValue = std::max(maxValue, number);
 
-        remainStr = remainStr.substr(it + 1);
+        spacePosition = nextSpacePosition;
     }
 
-    return { std::to_string(minStr) + ' ' + std::to_string(maxStr) };
+    return { std::to_string(minValue) + ' ' + std::to_string(maxValue) };
 }
 
 // 입력 문자열과 기대값, 실제값을 한 줄에서 비교
