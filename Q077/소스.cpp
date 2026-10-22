@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                            ⭐ 해결 완료 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
@@ -32,33 +32,25 @@ vector<int> solution(string s) {
     
     // 임시 필요없으면 지울것
     int& count = answer.front();
-    int& deletedZeroCount = answer.back();
+    int& totalRemovedZeroCount = answer.back();
     
-    int originalLength = s.size();
     while (s != "1")
     {
-        int deletedZeroLength = 0;
-        int tempDeletedZeroCount = 0;
+        int originalLength = s.size();
+        int removedZeroCount = 0;
         for (int i = 0; i < originalLength; ++i)
         {
             if (s[i] == '0')
             {
-                ++tempDeletedZeroCount;
+                ++removedZeroCount;
             }
 
         }
         ++count;
 
-        deletedZeroLength = originalLength - tempDeletedZeroCount;
-        originalLength = deletedZeroLength;
-        deletedZeroCount += tempDeletedZeroCount;
+        totalRemovedZeroCount += removedZeroCount;
 
-        if (tempDeletedZeroCount == 0)
-        {
-            break;
-        }
-
-        s = std::string(tempDeletedZeroCount, '1');
+        s = decToBin(originalLength - removedZeroCount);
     }
 
     return answer;
