@@ -5,52 +5,55 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
-std::string decToBin(int n)
+// 2로 나눈 나머지를 낮은 자리부터 모은 뒤 순서를 뒤집어 이진수 문자열 생성
+std::string decToBin(int number)
 {
-    if (n <= 0)
+    if (number <= 0)
     {
         return "0";
     }
     
-    std::string result{};
-    while (n > 0)
+    std::string binary{};
+    while (number > 0)
     {
-        result += (n % 2) + '0';
-        n /= 2;
+        binary += (number % 2) + '0';
+        number /= 2;
     }
 
-    std::reverse(result.begin(), result.end());
-    return result;
+    std::reverse(binary.begin(), binary.end());
+    return binary;
 }
 
 // {이진 변환 횟수, 제거한 0의 누적 개수} 반환
 vector<int> solution(string s) {
     vector<int> answer(2, 0);
     
-    // 임시 필요없으면 지울것
-    int& count = answer.front();
+    // 반환 배열의 각 원소에 역할을 나타내는 이름을 붙여 직접 누적
+    int& conversionCount = answer.front();
     int& totalRemovedZeroCount = answer.back();
     
     while (s != "1")
     {
-        int originalLength = s.size();
+        // 이번 문자열에서 제거될 0의 개수를 확인
+        int currentLength = s.size();
         int removedZeroCount = 0;
-        for (int i = 0; i < originalLength; ++i)
+        for (int i = 0; i < currentLength; ++i)
         {
             if (s[i] == '0')
             {
                 ++removedZeroCount;
             }
-
         }
-        ++count;
 
+        // 변환 횟수와 제거한 0을 누적하고, 남은 길이를 이진수 문자열로 변환
+        ++conversionCount;
         totalRemovedZeroCount += removedZeroCount;
 
-        s = decToBin(originalLength - removedZeroCount);
+        s = decToBin(currentLength - removedZeroCount);
     }
 
     return answer;
@@ -73,7 +76,16 @@ void Test(const string& name, const string& s, const vector<int>& expected)
     const vector<int> actual = solution(s);
     const bool success = actual == expected;
     cout << (success ? "\x1b[38;2;120;230;102m SUCCESS" : "\x1b[38;2;230;102;102m  FAIL  ")
-        << "\x1b[0m | " << name << " | input: s = " << '"' << s << '"';
+        << "\x1b[0m | " << name << " | input: s = ";
+    // 긴 입력은 앞부분과 전체 길이만 출력하여 테스트 결과를 읽기 쉽게 유지
+    if (s.size() > 80)
+    {
+        cout << '"' << s.substr(0, 40) << "...\" (length: " << s.size() << ')';
+    }
+    else
+    {
+        cout << '"' << s << '"';
+    }
     cout << " | expected: ";
     PrintVector(expected);
     cout << " | actual: ";
@@ -91,6 +103,9 @@ int main()
     Test("additional case 3", "01", { 1, 1 });
     Test("additional case 4", "11", { 2, 1 });
     Test("additional case 5", "1000", { 1, 3 });
+    // 최대 길이에서 0이 없는 경우와 1이 하나뿐인 경우를 각각 검증
+    Test("additional case 6 (maximum length, all ones)", string(150000, '1'), { 3, 13 });
+    Test("additional case 7 (maximum length, one one)", "1" + string(149999, '0'), { 1, 149999 });
     return 0;
 }
 
