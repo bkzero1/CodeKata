@@ -14,11 +14,8 @@ int solution(int n) {
     
     const int divisor = 1234567;
     
-    int sentinel = -1;
     if (lastComputedIndex == 0)
     {
-        fibonacciRemainders.fill(sentinel);
-
         fibonacciRemainders.at(0) = 0;
         fibonacciRemainders.at(1) = 1;
 
@@ -28,10 +25,7 @@ int solution(int n) {
     // 타뷸레이션
     for (int i = lastComputedIndex + 1; i <= n; ++i)
     {
-        if(fibonacciRemainders.at(i) == sentinel)
-        {
-            fibonacciRemainders.at(i) = (fibonacciRemainders.at(i - 2) % divisor + fibonacciRemainders.at(i - 1) % divisor) % divisor;
-        }
+        fibonacciRemainders.at(i) = (fibonacciRemainders.at(i - 2) + fibonacciRemainders.at(i - 1)) % divisor;
     }
 
     if (n > lastComputedIndex)
