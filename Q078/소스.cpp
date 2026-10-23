@@ -15,7 +15,7 @@ unsigned long long fibonacci(unsigned long long n, int divisor = 1234567) {
     }
     else
     {
-        return fibonacci(n - 2) % divisor + fibonacci(n - 1) % divisor;
+        return (fibonacci(n - 2) % divisor + fibonacci(n - 1) % divisor) % divisor;
     }
 }
 
@@ -47,6 +47,10 @@ int main()
     Test("Additional 3", 6, 8);
     Test("Additional 4", 10, 55);
     Test("Additional 5", 20, 6765);
+    // 나누는 값보다 작은 경계와, 실제 나머지 처리가 필요한 입력
+    Test("Additional 6 (before modulus boundary)", 30, 832040);
+    Test("Additional 7 (first modulus boundary)", 31, 111702);
+    Test("Additional 8 (multiple modulus ranges)", 34, 764619);
     return 0;
 }
 
