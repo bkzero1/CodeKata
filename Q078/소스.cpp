@@ -1,26 +1,45 @@
 ﻿#include <iostream>
 //==========================================================================
-//                            ⭐  ⭐ ✔ ✅
+//                            ⭐ 해결 완료 ⭐ ✔ ✅
 //==========================================================================
 
 #include <string>
-#include <vector>
+#include <array>
 
 using namespace std;
 
-int fibonacci(int n, int divisor = 1234567) {
-    if (n <= 1)
-    {
-        return n; // n이 1보다 작을 때는 해당 값을 그대로 반환한다.
-    }
-    else
-    {
-        return (fibonacci(n - 2) % divisor + fibonacci(n - 1) % divisor) % divisor;
-    }
-}
-
 int solution(int n) {
-    return fibonacci(n);
+    static std::array<int, 100000 + 1> fibonacciRemainders;
+    static int lastComputedIndex = 0;
+    
+    const int divisor = 1234567;
+    
+    int sentinel = -1;
+    if (lastComputedIndex == 0)
+    {
+        fibonacciRemainders.fill(sentinel);
+
+        fibonacciRemainders.at(0) = 0;
+        fibonacciRemainders.at(1) = 1;
+
+        lastComputedIndex = 1;
+    }
+
+    // 타뷸레이션
+    for (int i = lastComputedIndex + 1; i <= n; ++i)
+    {
+        if(fibonacciRemainders.at(i) == sentinel)
+        {
+            fibonacciRemainders.at(i) = (fibonacciRemainders.at(i - 2) % divisor + fibonacciRemainders.at(i - 1) % divisor) % divisor;
+        }
+    }
+
+    if (n > lastComputedIndex)
+    {
+        lastComputedIndex = n;
+    }
+
+    return fibonacciRemainders.at(n);
 }
 
 void Test(const string& name, int n, int expected)
@@ -49,6 +68,18 @@ int main()
     Test("Additional 6 (before modulus boundary)", 30, 832040);
     Test("Additional 7 (first modulus boundary)", 31, 111702);
     Test("Additional 8 (multiple modulus ranges)", 34, 764619);
+
+    // 재호출 시 기존 계산 결과 재사용과 필요한 구간의 추가 계산 확인
+    Test("Additional 9 (extend cache)", 100, 963606);
+    Test("Additional 10 (reuse smaller input)", 50, 1093027);
+    Test("Additional 11 (extend cache again)", 1000, 138544);
+    Test("Additional 12 (reuse earlier input)", 100, 963606);
+
+    // 최대 입력 계산 후 작은 입력, 최대 직전 및 동일 입력 재호출 확인
+    Test("Additional 13 (maximum input)", 100000, 1168141);
+    Test("Additional 14 (minimum after maximum)", 2, 1);
+    Test("Additional 15 (just below maximum)", 99999, 539935);
+    Test("Additional 16 (repeat maximum)", 100000, 1168141);
     return 0;
 }
 
