@@ -8,7 +8,7 @@
 
 using namespace std;
 
-unsigned long long fibonacci(unsigned long long n, int divisor = 1234567) {
+int fibonacci(int n, int divisor = 1234567) {
     if (n <= 1)
     {
         return n; // n이 1보다 작을 때는 해당 값을 그대로 반환한다.
@@ -20,9 +20,7 @@ unsigned long long fibonacci(unsigned long long n, int divisor = 1234567) {
 }
 
 int solution(int n) {
-    int answer = fibonacci(n);
-    //cout << "fibonacci(100000): " << fibonacci(100000) << endl;
-    return answer;
+    return fibonacci(n);
 }
 
 void Test(const string& name, int n, int expected)
