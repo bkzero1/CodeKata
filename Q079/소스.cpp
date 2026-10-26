@@ -2,6 +2,7 @@
 //==========================================================================
 //                            ⭐ 해결 완료 ⭐ ✔ ✅
 //==========================================================================
+// 수식 풀이: AI가 설명한 합·곱과 근의 공식 아이디어를 참고하여 구현
 
 #include <string>
 #include <vector>
@@ -10,35 +11,19 @@
 using namespace std;
 
 vector<int> solution(int brown, int yellow) {
+    // 갈색 테두리는 가로 두 줄과 세로 두 줄에서 중복된 모서리 4칸을 뺀 개수
+    // brown = 2 * (가로 + 세로) - 4이므로, 4를 더하고 2로 나누면 두 길이의 합
+    // 두 길이의 곱은 갈색과 노란색을 합한 전체 넓이
+    const int sideSum = (brown + 4) / 2;
     const int totalTiles = brown + yellow;
 
-    // 가로가 세로 이상이므로 전체 넓이의 제곱근을 올림한 값부터 탐색
-    int candidateWidth = static_cast<int>(std::sqrt(totalTiles));
-    if (candidateWidth * candidateWidth != totalTiles)
-    {
-        ++candidateWidth;
-    }
+    // 가로와 세로를 두 근으로 갖는 식: x² - sideSum * x + totalTiles = 0
+    // 근의 공식에서 큰 근은 가로, 작은 근은 세로 (가로 >= 세로)
+    const int width = static_cast<int>((sideSum + std::sqrt(sideSum * sideSum - 4 * totalTiles)) / 2);
+    //const int height = (sideSum - std::sqrt(sideSum * sideSum - 4 * totalTiles)) / 2;
+    const int height = totalTiles / width;
 
-    // 세로에도 갈색 테두리와 노란색이 들어가도록 최소 3칸을 확보
-    // 전체 넓이를 나누는 후보에서 테두리를 제외한 내부 넓이를 확인
-    while (totalTiles / candidateWidth >= 3)
-    {
-        if (totalTiles % candidateWidth == 0)
-        {
-            const int yellowWidth = candidateWidth - 2;
-            const int yellowHeight = totalTiles / candidateWidth - 2;
-
-            if (yellowWidth * yellowHeight == yellow)
-            {
-                return { candidateWidth, totalTiles / candidateWidth };
-            }
-        }
-
-        ++candidateWidth;
-    }
-
-    // 문제 조건에서는 정답이 존재하므로 정상 입력에서는 도달하지 않음
-    return { -1, -1 };
+    return { width, height };
 }
 
 void PrintVector(const vector<int>& values)
