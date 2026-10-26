@@ -19,7 +19,7 @@ vector<int> solution(int brown, int yellow) {
         ++root;
     }
 
-    while (true)
+    while ((totalTiles) / root >= 3)
     {
         if ((totalTiles) % root == 0)
         {
@@ -34,6 +34,9 @@ vector<int> solution(int brown, int yellow) {
         
         ++root;
     }
+ 
+    // 못찾았을 때. 다만 문제 조건상 못찾았을 경우는 없음
+    return { -1, -1 };
 }
 
 void PrintVector(const vector<int>& values)
