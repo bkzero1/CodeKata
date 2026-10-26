@@ -9,33 +9,35 @@
 
 using namespace std;
 
-// 노란색을 감싸야 하므로 width >= 3
 vector<int> solution(int brown, int yellow) {
     const int totalTiles = brown + yellow;
-    int root = static_cast<int>(std::sqrt(totalTiles));
 
-    if (root * root != totalTiles)
+    // 가로가 세로 이상이므로 전체 넓이의 제곱근을 올림한 값부터 탐색
+    int candidateWidth = static_cast<int>(std::sqrt(totalTiles));
+    if (candidateWidth * candidateWidth != totalTiles)
     {
-        ++root;
+        ++candidateWidth;
     }
 
-    while ((totalTiles) / root >= 3)
+    // 세로에도 갈색 테두리와 노란색이 들어가도록 최소 3칸을 확보
+    // 전체 넓이를 나누는 후보에서 테두리를 제외한 내부 넓이를 확인
+    while (totalTiles / candidateWidth >= 3)
     {
-        if ((totalTiles) % root == 0)
+        if (totalTiles % candidateWidth == 0)
         {
-            const int yellowWidth = root - 2;
-            const int yellowHeight = (((totalTiles) / root) - 2);
+            const int yellowWidth = candidateWidth - 2;
+            const int yellowHeight = totalTiles / candidateWidth - 2;
 
             if (yellowWidth * yellowHeight == yellow)
             {
-                return { root, (totalTiles) / root };
+                return { candidateWidth, totalTiles / candidateWidth };
             }
         }
-        
-        ++root;
+
+        ++candidateWidth;
     }
- 
-    // 못찾았을 때. 다만 문제 조건상 못찾았을 경우는 없음
+
+    // 문제 조건에서는 정답이 존재하므로 정상 입력에서는 도달하지 않음
     return { -1, -1 };
 }
 
