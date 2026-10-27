@@ -8,14 +8,17 @@
 
 using namespace std;
 
-// 참가자, A, B
+// 두 참가자가 만나는 라운드를 반환
 int solution(int n, int a, int b)
 {
-    // n의 반 값보다 A, B가 작거나 같은가 -> n / 2
-    while (a <= (n / 2) && b <= (n / 2) || a > (n / 2) && b > (n / 2))
+    // 같은 절반에 있는 동안 해당 대진 구간으로 범위를 좁혀 다시 검사
+    while ((a <= (n / 2) && b <= (n / 2)) ||
+           (a > (n / 2) && b > (n / 2)))
     {
         n /= 2;
-        
+
+        // 줄어든 n은 이전 구간의 중간 경계
+        // 오른쪽 절반이었다면 번호를 새 구간의 1번부터 시작하도록 이동
         if (a > n && b > n)
         {
             a -= n;
@@ -23,7 +26,8 @@ int solution(int n, int a, int b)
         }
     }
 
-    // n의 반 값 양쪽으로 배치되어있는가? -> 2의 지수가 답
+    // 서로 다른 절반에 있으면 현재 구간의 마지막 라운드에서 만남
+    // 구간 크기가 2의 거듭제곱이므로 log2로 해당 라운드를 계산
     return static_cast<int>(std::log2(n));
 }
 
@@ -39,7 +43,7 @@ void Test(const char* name, int n, int a, int b, int expected)
 
 int main()
 {
-    //// 공식 예제
+    // 공식 예제
     Test("Official 1", 8, 4, 7, 3);
 
     // 추가 테스트: 작은 대회, 다른 번호 순서, 큰 입력
