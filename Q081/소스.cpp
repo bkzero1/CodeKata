@@ -9,14 +9,19 @@
 
 using namespace std;
 
+// 배열에 담긴 모든 수의 최소공배수를 반환
 int solution(vector<int> arr) {
+    // 첫 원소로 누적 최소공배수의 시작값을 설정
+    int accumulatedLcm = arr.at(0);
 
-    int lcm = arr.at(0);
-    for (int i = 0; i + 1 < arr.size(); ++i)
+    // 이미 반영한 첫 원소를 제외하고 인덱스 1부터 나머지 원소를 누적
+    // 원소가 하나면 반복 조건이 거짓이므로 추가 접근 없이 반환
+    for (int index = 1; index < arr.size(); ++index)
     {
-        lcm = std::lcm(lcm, arr.at(i + 1));
+        accumulatedLcm = std::lcm(accumulatedLcm, arr.at(index));
     }
-    return lcm;
+
+    return accumulatedLcm;
 }
 
 void PrintVector(const vector<int>& values)
