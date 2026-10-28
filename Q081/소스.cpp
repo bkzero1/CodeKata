@@ -18,7 +18,10 @@ int solution(vector<int> arr) {
     // 원소가 하나면 반복 조건이 거짓이므로 추가 접근 없이 반환
     for (int index = 1; index < arr.size(); ++index)
     {
-        accumulatedLcm = std::lcm(accumulatedLcm, arr.at(index));
+        // 최대공약수로 먼저 나누면 정확히 나누어떨어지고 중간 곱셈값도 줄어듦
+        // 입력이 자연수이므로 절댓값 처리는 필요하지 않음
+        accumulatedLcm =
+            (accumulatedLcm / std::gcd(accumulatedLcm, arr.at(index))) * arr.at(index);
     }
 
     return accumulatedLcm;
